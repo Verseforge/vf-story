@@ -26,6 +26,6 @@
       "purpose": "maskable"
     }
   ],
-  "description": "一个支持离线创作、分支编排与独立 HTML 导出的互动故事编辑器。",
-  "lang": "zh-CN"
+  "description": "Create branching stories with a visual editor, variables, conditions, and live preview. Work offline and export standalone HTML games. Chinese and English UI.",
+  "lang": "en"
 }

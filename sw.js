@@ -1,12 +1,16 @@
 'use strict';
 // CACHE_BUILD is stamped automatically by the repository GitHub Action.
 // Keep sw.js at the same URL. Never change the editor's v1 database namespace for a cache update.
-const CACHE_BUILD = 'auto-167283b283ad';
+const CACHE_BUILD = 'auto-121758215484';
 const ROOT = new URL('./', self.location.href);
 const CACHE_PREFIX = 'vf-story-shell:' + encodeURIComponent(ROOT.href) + ':';
 const CACHE_NAME = CACHE_PREFIX + CACHE_BUILD;
 const APP_FILES = [
   'index.html', 'site.webmanifest',
+  'assets/icons/favicon.ico',
+  'assets/icons/favicon-96x96.png',
+  'assets/icons/favicon.svg',
+  'assets/icons/apple-touch-icon.png',
   'assets/icons/web-app-manifest-192x192.png',
   'assets/icons/web-app-manifest-512x512.png',
   'assets/icons/web-app-manifest-maskable-512x512.png'
