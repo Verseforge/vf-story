@@ -821,7 +821,7 @@ input.placeholder-scroll-covered::placeholder{color:transparent!important;opacit
 
 <script>
 // Release baseline: preserve v1 data and introduce explicit migrations before changing a persisted schema.
-const VF_RELEASE=Object.freeze({appVersion:'1.0.5',storyVersion:1,materialVersion:1,editorSchema:1,statusPanelSchema:1,backupVersion:1,themeVersion:1,dbVersion:1,storageNamespace:'v1'});
+const VF_RELEASE=Object.freeze({appVersion:'1.0.6',storyVersion:1,materialVersion:1,editorSchema:1,statusPanelSchema:1,backupVersion:1,themeVersion:1,dbVersion:1,storageNamespace:'v1'});
 // Public metadata is English independently of the editor language.
 const VF_PUBLIC_METADATA=Object.freeze({"title":"Verseforge Story | Interactive Fiction Editor","description":"Create branching stories with a visual editor, variables, conditions, and live preview. Work offline and export standalone HTML games. Chinese and English UI."});
 const VF_STORAGE=Object.freeze({database:'vfstory_editor_'+VF_RELEASE.storageNamespace,language:'vfstory_editor_language_'+VF_RELEASE.storageNamespace});
@@ -18651,6 +18651,10 @@ localizeStaticShell();
     const vv = window.visualViewport;
     return Math.max(0, innerHeight, document.documentElement.clientHeight, vv ? vv.height + vv.offsetTop : 0);
   }
+  function setStableModalHeight(height){
+    const style=document.documentElement.style,value=Math.round(height)+'px';
+    if(style.getPropertyValue('--stable-modal-height')!==value)style.setProperty('--stable-modal-height',value);
+  }
   function syncStableModalViewport(force = false) {
     if (innerWidth > 720) {
       document.documentElement.style.removeProperty('--stable-modal-height');
@@ -18660,14 +18664,14 @@ localizeStaticShell();
       const h = viewportExtent();
       if (h > 0) viewportBaseline = h;
     }
-    document.documentElement.style.setProperty('--stable-modal-height', Math.round(viewportBaseline) + 'px');
+    setStableModalHeight(viewportBaseline);
   }
   function softKeyboardHeight() {
     const vv = window.visualViewport;
     if (!vv || innerWidth > 720) return 0;
     const visibleBottom = vv.height + vv.offsetTop;
     viewportBaseline = Math.max(viewportBaseline, document.documentElement.clientHeight, innerHeight, visibleBottom);
-    document.documentElement.style.setProperty('--stable-modal-height', Math.round(viewportBaseline) + 'px');
+    setStableModalHeight(viewportBaseline);
     return Math.max(0, viewportBaseline - visibleBottom);
   }
   function isSoftKeyboardOpen() {
@@ -37787,7 +37791,7 @@ localizeStaticShell();
     if(!layer)return;
     if(storyCreationGuide){storyGuideTarget()?.focus({preventScroll:true});return;}
     const items=modalFocusable(layer),textField=items.find(el=>el.matches('input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]),textarea'));
-    const searchOnly=layer.id==='globalSearchLayer',emptyCreation=layer.dataset.editorFocusMode==='create'&&textField&&!textField.value.trim();
+    const searchOnly=layer.id==='globalSearchLayer'&&textField&&!textField.value.trim(),emptyCreation=layer.dataset.editorFocusMode==='create'&&textField&&!textField.value.trim();
     if(searchOnly&&textField)textField.focus({preventScroll:true});
     else if(emptyCreation)textField.focus({preventScroll:true});
     else focusModalContainer(layer);
@@ -37817,6 +37821,11 @@ localizeStaticShell();
     if(!layer?.classList.contains('modal-layer')||layer.classList.contains('hidden'))return;
     rememberModalFocus(layer);
     layer.classList.toggle('drawer-modal',!els.storyDrawerLayer.classList.contains('hidden'));
+    // Remember the opening context; revealing a parent must not restart its scrim animation.
+    if(!layer.matches('.preview-runtime-dialog,.story-themed-dialog,.vf-modal-exit-ghost')){
+      const nested=!els.storyDrawerLayer.classList.contains('hidden')||visibleEditorModalLayers().some(other=>other!==layer);
+      if(nested||!editorLayerOrder.has(layer))layer.classList.toggle('vf-modal-nested',nested);
+    }
     const remember=new Set(['storySystemsLayer','memoryLayer','variableLayer','entityLayer','eventPoolLayer','effectGroupLayer','stateResponseLayer','stateRouteLayer','entityActionLayer','statusPanelLayer','achievementLayer']);
     if(!remember.has(layer.id)&&!layer.id.startsWith('preview')){
       for(const scroller of layer.querySelectorAll('.modal-scroll'))scroller.scrollTop=0;
@@ -37882,8 +37891,15 @@ localizeStaticShell();
       if (layer.classList.contains('modal-underlay')!==underlay) layer.classList.toggle('modal-underlay',underlay);
       if(layer.classList.contains('drawer-modal')!==drawerVisible)layer.classList.toggle('drawer-modal',drawerVisible);
     });
-    for(const node of $$('.page-stack,.mobile-nav'))node.inert=(layers.length>0||drawerVisible)&&!node.contains(activeEditorFocusSurface());
-    for(const layer of layers)layer.inert=activeEditorFocusSurface()!==layer&&!layer.contains(activeEditorFocusSurface());
+    const focusSurface=activeEditorFocusSurface();
+    for(const node of $$('.page-stack,.mobile-nav')){
+      const inert=(layers.length>0||drawerVisible)&&!node.contains(focusSurface);
+      if(node.inert!==inert)node.inert=inert;
+    }
+    for(const layer of layers){
+      const inert=focusSurface!==layer&&!layer.contains(focusSurface);
+      if(layer.inert!==inert)layer.inert=inert;
+    }
     syncModalFocus(layers);
     syncKeyboardShift();
     syncModalCloseHint();
@@ -39807,25 +39823,30 @@ function compactPlayerCss(published=false){
   --vf-ease: cubic-bezier(.22, .8, .24, 1);
 }
 
+/* Header and scrolling content own the same solid surface as the editor card. */
+.modal-layer:not(.preview-runtime-dialog):not(.story-themed-dialog):not(.vf-modal-exit-ghost)>.modal>.modal-head,
+.modal-layer:not(.preview-runtime-dialog):not(.story-themed-dialog):not(.vf-modal-exit-ghost)>.modal>.modal-scroll{background-color:var(--surface)}
+
+/* Keep editor dialog surfaces opaque; scrims are separate from scrolling forms. */
+.modal-layer:not(.preview-runtime-dialog):not(.story-themed-dialog):not(.vf-modal-exit-ghost){background:transparent;isolation:isolate;opacity:1}
+.modal-layer:not(.preview-runtime-dialog):not(.story-themed-dialog):not(.vf-modal-exit-ghost)::before{content:"";position:absolute;inset:0;z-index:0;background:var(--overlay);pointer-events:none}
+.modal-layer:not(.preview-runtime-dialog):not(.story-themed-dialog):not(.vf-modal-exit-ghost)>.modal{position:relative;z-index:1;opacity:1}
+.modal-layer.modal-underlay:not(.preview-runtime-dialog):not(.story-themed-dialog):not(.vf-modal-exit-ghost)::before{background:transparent!important}
+
 @media (prefers-reduced-motion: no-preference) {
 
   /* 1) 页面切换：淡入 */
   .app-page.active { animation: vfPageIn var(--vf-base) ease-out; }
   @keyframes vfPageIn { from { opacity: 0 } to { opacity: 1 } }
 
-  /* 2) 弹窗：遮罩淡入 + 卡片轻微上浮
-        （含从侧边栏打开的 .drawer-modal 弹窗；故事本体弹窗除外） */
-  .modal-layer:not(.hidden):not(.preview-runtime-dialog):not(.story-themed-dialog) {
-    animation: vfFadeIn 160ms ease-out;
-  }
-  .modal-layer:not(.hidden):not(.preview-runtime-dialog):not(.story-themed-dialog) > .modal {
-    animation: vfModalIn var(--vf-pop) var(--vf-ease);
-  }
-  @keyframes vfFadeIn { from { opacity: 0 } to { opacity: 1 } }
-  @keyframes vfModalIn {
-    from { opacity: 0; transform: translateY(12px) scale(.975) }
-    to   { opacity: 1; transform: none }
-  }
+  /* Fade editor dialogs without changing coordinate/compositing boundaries after entry. */
+  .modal-layer:not(.hidden):not(.preview-runtime-dialog):not(.story-themed-dialog):not(.vf-modal-exit-ghost){animation:none}
+  .modal-layer:not(.hidden):not(.preview-runtime-dialog):not(.story-themed-dialog):not(.vf-modal-exit-ghost)::before{will-change:opacity;animation:vfFadeIn 160ms ease-out both}
+  .modal-layer.vf-modal-nested:not(.hidden):not(.preview-runtime-dialog):not(.story-themed-dialog):not(.vf-modal-exit-ghost)::before{animation:none}
+  .modal-layer:not(.hidden):not(.preview-runtime-dialog):not(.story-themed-dialog):not(.vf-modal-exit-ghost)>.modal{transform:none;will-change:opacity;animation:vfModalIn var(--vf-pop) var(--vf-ease) both}
+  @keyframes vfFadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes vfModalIn{from{opacity:0}to{opacity:1}}
+
 
   /* 3) 小浮层：画布查找框、取色长按菜单 */
   .graph-search-overlay:not(.hidden),

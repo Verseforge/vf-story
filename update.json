@@ -1,8 +1,8 @@
 {
-  "versionCode": 6,
-  "versionName": "1.0.5",
+  "versionCode": 7,
+  "versionName": "1.0.6",
   "notes": {
-    "zh-CN": "更新至新网址与新仓库维护的 1.0.5。升级后自动更新使用新渠道；保留内嵌图标，完善英文网站介绍。",
-    "en": "Move to the 1.0.5 release maintained at the new website and repository. Future app updates use the new channel. Embedded icons are retained and English public metadata is improved."
+    "zh-CN": "修复部分弹窗打开时闪烁的问题。",
+    "en": "Fixed an issue where some modals flickered when opened."
   }
 }
