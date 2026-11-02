@@ -1,8 +1,8 @@
 {
-  "versionCode": 7,
-  "versionName": "1.0.6",
+  "versionCode": 8,
+  "versionName": "1.1.0",
   "notes": {
-    "zh-CN": "修复部分弹窗打开时闪烁的问题。",
-    "en": "Fixed an issue where some modals flickered when opened."
+    "zh-CN": "修复无法导出文件的问题，调整 UI 与说明文字，优化体验。",
+    "en": "Fixed the file export issue, adjusted the UI and copy, and improved the overall experience."
   }
 }
