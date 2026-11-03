@@ -1,8 +1,8 @@
 {
-  "versionCode": 8,
-  "versionName": "1.1.0",
+  "versionCode": 9,
+  "versionName": "1.1.1",
   "notes": {
-    "zh-CN": "修复无法导出文件的问题，调整 UI 与说明文字，优化体验。",
-    "en": "Fixed the file export issue, adjusted the UI and copy, and improved the overall experience."
+    "zh-CN": "新增倒计时变量，输入匹配支持按匹配结果设置变量写入范围，并修复多项问题、优化使用体验。",
+    "en": "Added timer variables and the ability to save player input to a variable only for selected input matching outcomes, along with bug fixes and usability improvements."
   }
 }
