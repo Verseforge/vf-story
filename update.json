@@ -1,8 +1,8 @@
 {
-  "versionCode": 9,
-  "versionName": "1.1.1",
+  "versionCode": 10,
+  "versionName": "1.1.2",
   "notes": {
-    "zh-CN": "新增倒计时变量，输入匹配支持按匹配结果设置变量写入范围，并修复多项问题、优化使用体验。",
-    "en": "Added timer variables and the ability to save player input to a variable only for selected input matching outcomes, along with bug fixes and usability improvements."
+    "zh-CN": "支持在正文开头及段间手动添加空行，新增标题与正文居中对齐，修复若干问题并优化使用体验。",
+    "en": "Added support for blank lines at the start of body text and between paragraphs, plus center alignment for titles and body text. Includes bug fixes and usability improvements."
   }
 }
