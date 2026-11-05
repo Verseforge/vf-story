@@ -1,8 +1,8 @@
 {
-  "versionCode": 10,
+  "versionCode": 11,
   "versionName": "1.1.2",
   "notes": {
-    "zh-CN": "支持在正文开头及段间手动添加空行，新增标题与正文居中对齐，修复若干问题并优化使用体验。",
-    "en": "Added support for blank lines at the start of body text and between paragraphs, plus center alignment for titles and body text. Includes bug fixes and usability improvements."
+    "zh-CN": "修订版 1.1.2，修复了安卓平板无法导出文件的问题。",
+    "en": "Revision 1.1.2 fixes the issue that prevented files from being exported on Android tablets."
   }
 }
