@@ -1,8 +1,8 @@
 {
-  "versionCode": 11,
-  "versionName": "1.1.2",
+  "versionCode": 12,
+  "versionName": "1.1.3",
   "notes": {
-    "zh-CN": "修订版 1.1.2，修复了安卓平板无法导出文件的问题。",
-    "en": "Revision 1.1.2 fixes the issue that prevented files from being exported on Android tablets."
+    "zh-CN": "新增查看说明与条件正文，故事面板支持节点记录、正文回顾和分类折叠，完善保存撤销，并修复已知问题、优化使用体验。",
+    "en": "Added read-only descriptions with conditional text, node records and passage recaps, and collapsible story panel categories, alongside improved undo, bug fixes, and usability refinements."
   }
 }
