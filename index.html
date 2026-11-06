@@ -1474,7 +1474,7 @@ html[lang^="zh"] #nodeTitleAlignmentLabel{margin-inline-end:-.4em}
 </script>
 <script>
 // Release baseline: preserve v1 data and introduce explicit migrations before changing a persisted schema.
-const VF_RELEASE=Object.freeze({appVersion:'1.1.3',storyVersion:1,materialVersion:1,editorSchema:1,statusPanelSchema:1,backupVersion:1,themeVersion:1,dbVersion:1,storageNamespace:'v1'});
+const VF_RELEASE=Object.freeze({appVersion:'1.1.4',storyVersion:1,materialVersion:1,editorSchema:1,statusPanelSchema:1,backupVersion:1,themeVersion:1,dbVersion:1,storageNamespace:'v1'});
 // Public metadata is English independently of the editor language.
 const VF_PUBLIC_METADATA=Object.freeze({"title":"Verseforge Story | Interactive Fiction Editor","description":"Create branching stories with a visual editor, variables, conditions, and live preview. Work offline and export standalone HTML games. Chinese and English UI."});
 const VF_STORAGE=Object.freeze({database:'vfstory_editor_'+VF_RELEASE.storageNamespace,language:'vfstory_editor_language_'+VF_RELEASE.storageNamespace});
@@ -34969,7 +34969,7 @@ localizeStaticShell();
       }
       host.appendChild(card);
     });
-    if (reordering) bindPointerReorder(host, '.state-response-card', '.state-response-handle', editorActionTransaction(rows => {
+    if (reordering) bindPointerReorder(host, '.state-response-card', '.state-response-handle', rows => {
       const ids = rows.map(row => row.dataset.responseId),
         map = new Map(items.map(x => [x.id, x]));
       snapshot();
@@ -34977,7 +34977,7 @@ localizeStaticShell();
       saveState();
       renderStateResponseManager();
       renderStorySystems();
-    },'save','project','response'));
+    });
   }
   function openStateResponseEditor(id = '') {
     const p = currentProject(),
@@ -45132,13 +45132,31 @@ localizeStaticShell();
     const a=editorActionUndo,root=editorActionRoot(a.mode,a.pid),probe=actionClone(root);
     if(a.pid!==state.currentProjectId||a.epoch!==state.preferences.dataEpoch||Date.now()>=a.expires||!a.restore&&(!root||![...a.patches].reverse().every(p=>applyActionPatch(probe,p,true))))clearEditorActionUndo();
   }
-  function renderEditorUndoToast(message,action){
-    toast(message);editorActionUndo=action;
-    const t=els.toastWrap.querySelector('.toast');t.classList.add('toast-with-undo');t.setAttribute('role','status');
-    const text=document.createElement('span');text.className='toast-message';text.textContent=normalizeToastText(message);t.replaceChildren(text);
-    const button=document.createElement('button');button.type='button';button.className='toast-undo';button.textContent=uiText('undo');button.onclick=()=>void undoEditorAction(action);t.appendChild(button);
-    clearTimeout(toastTimer);toastTimer=setTimeout(()=>{if(editorActionUndo===action)clearEditorActionUndo();t.remove();toastTimer=0;},5000);
+  function renderEditorToast(message, action = null) {
+    editorToastSequence++; clearEditorActionUndo();
+    els.toastWrap.style.zIndex = String(editorLayerSequence + 2);
+    let element = els.toastWrap.querySelector('.toast');
+    const fresh = !element;
+    if (fresh) { element = document.createElement('div'); element.className = 'toast'; }
+    element.setAttribute('role', 'status');
+    element.classList.toggle('toast-with-undo', Boolean(action));
+    if (action) {
+      editorActionUndo = action;
+      const text = document.createElement('span'); text.className = 'toast-message'; text.textContent = normalizeToastText(message);
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'toast-undo'; button.textContent = uiText('undo'); button.onclick = () => void undoEditorAction(action);
+      element.replaceChildren(text, button);
+    } else element.textContent = normalizeToastText(message);
+    if (fresh) els.toastWrap.appendChild(element);
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      if (action && editorActionUndo === action) clearEditorActionUndo();
+      element.remove(); toastTimer = 0;
+    }, action ? 5000 : 2500);
   }
+  function renderEditorUndoToast(message, action) {
+    renderEditorToast(message, action);
+  }
+
   function actionStillValid(action){return editorActionUndo===action&&Date.now()<action.expires&&state.currentProjectId===action.pid&&state.preferences.dataEpoch===action.epoch&&!editorDataBusy&&!coverageViewMode&&!editorToastContext;}
   function refreshActionViews(){
     renderAll();
@@ -45153,7 +45171,6 @@ localizeStaticShell();
   }
   async function undoEditorAction(action){
     if(!actionStillValid(action)){clearEditorActionUndo();toast(uiText('undoExpired'));return;}
-    if(pendingPanelAction){toast(uiText('undoChanged'));return;}
     for(const [id,baseline]of draftGuardBaselines)if(/(?:EditorLayer|RuleLayer|OperationLayer|stateRouteLayer|statusPanelLayer|chapterCountdownLayer)$/.test(id)&&$('#'+id)&&!$('#'+id).classList.contains('hidden')&&draftGuardValue(id)!==baseline){toast(uiText('undoChanged'));return;}
     if(editorActionApplying)return;editorActionApplying=true;clearEditorActionUndo();const button=els.toastWrap.querySelector('.toast-undo');if(button)button.disabled=true;
     try{
@@ -45262,7 +45279,6 @@ localizeStaticShell();
   function editorActionTransaction(fn, kind = 'save', mode = 'project', label = '', baseline = null) {
     return function(...args) {
       if (editorActionApplying || args[0]?.silent === true || editorToastContext) return fn.apply(this, args);
-      if (pendingPanelAction) { clearTimeout(panelActionTimer); pendingPanelAction = null; panelActionTimer = 0; }
       const pid = state.currentProjectId, epoch = state.preferences.dataEpoch;
       const before = baseline || editorActionSnapshot(mode, pid), serial = ++editorActionSerial;
       const ctx = {pid, epoch, serial, message:'', sequence:editorToastSequence, saved:false};
@@ -45272,12 +45288,14 @@ localizeStaticShell();
         release();
         const after = editorActionSnapshot(mode, pid), patches = before && after ? actionDiff(before, after) : [];
         if (!ctx.saved) { flushEditorActionToast(ctx); return value; }
+        const quietSave = kind === 'save' && label === 'panel';
         const message = independentActionMessage(kind, label, ctx.message) || ctx.message || _tr(kind === 'delete' ? 3064 : 3065);
         const reversible = kind === 'delete' || kind === 'restore' || kind === 'save' && independentSaveHasHistory(before, after, mode, label);
         const chain = storagePersistChain;
         void Promise.resolve(chain).then(ok => {
           if (serial !== editorActionSerial || state.currentProjectId !== pid || state.preferences.dataEpoch !== epoch || editorToastSequence !== ctx.sequence) return;
           if (ok === false || storageUnsavedChanges || storageExternalConflict || storageWriteLocked || storageUnavailable || !storageReady) { flushEditorActionToast(ctx, _tr(488)); return; }
+          if (quietSave) return;
           if (!patches.length || !reversible) { flushEditorActionToast(ctx, message); return; }
           const root = editorActionRoot(mode, pid), probe = actionClone(root);
           if (!root || ![...patches].reverse().every(p => applyActionPatch(probe, p, true))) { flushEditorActionToast(ctx); return; }
@@ -45291,43 +45309,16 @@ localizeStaticShell();
       } catch (error) { release(); flushEditorActionToast(ctx); throw error; }
     };
   }
-  let pendingPanelAction = null, panelActionTimer = 0;
   function installIndependentActionCoverage() {
     deleteManagedTheme = editorActionTransaction(deleteManagedTheme, 'delete', 'themes', 'theme');
     addChapter = editorActionTransaction(addChapter, 'save', 'project', 'chapter');
     createAuthorGroup = editorActionTransaction(createAuthorGroup, 'save', 'project', 'group');
     renameAuthorGroup = editorActionTransaction(renameAuthorGroup, 'rename', 'project', 'group');
-    commitAuthorBucketOrder = editorActionTransaction(commitAuthorBucketOrder, 'save', 'project', 'group');
     addAchievementCategory = editorActionTransaction(addAchievementCategory, 'save', 'project', 'achievementCategory');
     ui110DeleteRoute = editorActionTransaction(ui110DeleteRoute, 'delete', 'project', 'route');
-    ui110CommitRouteOrder = editorActionTransaction(ui110CommitRouteOrder, 'save', 'project', 'route');
     restoreLocalVersion = editorActionTransaction(restoreLocalVersion, 'restore', 'project', 'version');
     saveManualVersion = editorActionTransaction(saveManualVersion, 'save', 'versions', 'version');
     editVersionNote = editorActionTransaction(editVersionNote, 'rename', 'versions', 'version');
-    const commitPanel = ui110PanelAutoCommit;
-    ui110PanelAutoCommit = function(options = {}) {
-      if (editorActionApplying || editorToastContext) return commitPanel.call(this, options);
-      const pid = state.currentProjectId, epoch = state.preferences.dataEpoch;
-      if (pendingPanelAction && (pendingPanelAction.pid !== pid || pendingPanelAction.epoch !== epoch)) { clearTimeout(panelActionTimer); pendingPanelAction = null; }
-      if (options.defer) {
-        const before = pendingPanelAction?.before || editorActionSnapshot('project', pid);
-        const changed = commitPanel.call(this, options);
-        if (!changed) return changed;
-        pendingPanelAction = {pid, epoch, before};
-        clearTimeout(panelActionTimer);
-        panelActionTimer = setTimeout(() => {
-          panelActionTimer = 0;
-          const pending = pendingPanelAction; pendingPanelAction = null;
-          if (!pending || pending.pid !== state.currentProjectId || pending.epoch !== state.preferences.dataEpoch) return;
-          editorActionTransaction(() => saveState(), 'save', 'project', 'panel', pending.before)();
-        }, 800);
-        return changed;
-      }
-      if (!pendingPanelAction && statusPanelDraft && JSON.stringify(normalizeStatusPanelSettings(statusPanelDraft)) === JSON.stringify(normalizeStatusPanelSettings(currentProject().statusPanelSettings)) && !statusPanelCategoryRedirects.size) return commitPanel.call(this, options);
-      clearTimeout(panelActionTimer); panelActionTimer = 0;
-      const before = pendingPanelAction?.before; pendingPanelAction = null;
-      return editorActionTransaction(() => { const changed = commitPanel.call(this, options); if (before && !changed) saveState(); return changed; }, 'save', 'project', 'panel', before)();
-    };
     const refresh = refreshActionViews;
     refreshActionViews = function(...args) {
       const result = refresh.apply(this, args);
@@ -45364,25 +45355,9 @@ localizeStaticShell();
     return String(msg ?? '').trimEnd().replace(/[。．.!！?？，,、;；:：…\s]+$/gu,'');
   }
   function toast(msg) {
-    editorToastSequence++;clearEditorActionUndo();
-    if(editorToastContext){editorToastContext.message=msg;editorToastContext.sequence=editorToastSequence;return;}
-    els.toastWrap.style.zIndex=String(editorLayerSequence+2);
-    let t = els.toastWrap.querySelector('.toast');
-    const fresh=!t;
-    if (fresh) {
-      t = document.createElement('div');
-      t.className = 'toast';
-    }
-    t.classList.remove('toast-with-undo');t.setAttribute('role','status');
-    t.textContent = normalizeToastText(msg);
-    if(fresh)els.toastWrap.appendChild(t);
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => {
-      t.remove();
-      toastTimer = 0;
-    }, 2500);
+    if(editorToastContext){editorToastSequence++;clearEditorActionUndo();editorToastContext.message=msg;editorToastContext.sequence=editorToastSequence;return;}
+    renderEditorToast(msg);
   }
-
   function persistMaterialLibrary() {
     state.materialLibrary = normalizeMaterialLibrary(state.materialLibrary);
     if (!saveState({
@@ -50001,7 +49976,7 @@ function compactPlayerCss(published=false){
   }
   async function ui110PersistRoutes(routes){
     const p=currentProject(),before=p.stateRoutes;snapshot();p.stateRoutes=normalizeStateRoutes(routes);
-    if(!await persistExplicitDraft()){p.stateRoutes=before;return false;}
+    if(!await persistExplicitDraft({silent:true})){p.stateRoutes=before;return false;}
     stateRouteDraft=storageClone(p.stateRoutes);clearDraftGuard('stateRouteLayer');renderStorySystems();return true;
   }
   async function ui110CommitRouteOrder(){if(await ui110PersistRoutes(stateRouteDraft)){ui110RouteSorting=false;ui110RenderRoutes();}}
@@ -50243,7 +50218,7 @@ function compactPlayerCss(published=false){
     let more=$('.ui-more',footer);if(!more){more=ui110More(()=>[{label:uiText110('调序','Reorder'),disabled:(currentProject().entityActions||[]).length<2,run:()=>{ui110ActionSorting=true;renderEntityActionManager();}}]);footer.append(more);}more.classList.toggle('hidden',ui110ActionSorting);
     if(!ui110ActionSorting)return;
     host.replaceChildren();for(const item of items){const row=document.createElement('article');row.className='entity-action-card reorder';row.dataset.actionId=item.id;row.innerHTML='<span class="entity-action-operation-handle" role="button" tabindex="0" aria-label="'+escapeHtml(uiText110('拖动调序','Drag to reorder'))+'">☰</span><div class="ui-card-content"><strong>'+escapeHtml(item.name)+'</strong><small>'+escapeHtml(entityActionSummary(item,currentProject()))+'</small></div>';host.append(row);}
-    bindPointerReorder(host,'.entity-action-card','.entity-action-operation-handle',editorActionTransaction(rows=>{const p=currentProject(),map=new Map(items.map(x=>[x.id,x]));snapshot();p.entityActions=rows.map(row=>map.get(row.dataset.actionId)).filter(Boolean);saveState();renderStorySystems();},'save','project','action'));
+    bindPointerReorder(host,'.entity-action-card','.entity-action-operation-handle',rows=>{const p=currentProject(),map=new Map(items.map(x=>[x.id,x]));snapshot();p.entityActions=rows.map(row=>map.get(row.dataset.actionId)).filter(Boolean);saveState();renderStorySystems();});
   }
   function ui110StoryCards(){
     for(const card of $$('#storyList .story-card')){const rename=$('[data-rename]',card),del=$('[data-delete]',card),host=$('.story-card-actions',card);if(!host||host.querySelector('.ui-more'))continue;[rename,del].forEach(ui110Hide);host.append(ui110More([ui110Action(uiText110('删除','Delete'),del,{danger:true}),ui110Action(uiText110('改名','Rename'),rename)]));}
