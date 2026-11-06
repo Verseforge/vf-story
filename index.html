@@ -43583,6 +43583,7 @@ localizeStaticShell();
           p = normalizeProject(prepared.project);
         p.id = uid();
         p.title = uniqueStoryTitle(p.title);
+        p.createdAt = p.updatedAt = nowIso();
         const incomingThemes = normalizeCustomThemes(data?.preferences?.customThemes || p.customThemes || []),
           library = sharedCustomThemes(),
           ids = new Set(library.map(t => t.id));
