@@ -1,8 +1,8 @@
 {
-  "versionCode": 12,
-  "versionName": "1.1.3",
+  "versionCode": 13,
+  "versionName": "1.1.4",
   "notes": {
-    "zh-CN": "新增查看说明与条件正文，故事面板支持节点记录、正文回顾和分类折叠，完善保存撤销，并修复已知问题、优化使用体验。",
-    "en": "Added read-only descriptions with conditional text, node records and passage recaps, and collapsible story panel categories, alongside improved undo, bug fixes, and usability refinements."
+    "zh-CN": "修复故事面板自动保存提示频繁弹出的问题，导入故事在列表中统一显示本次导入的日期和时刻。",
+    "en": "Fixed excessive story panel autosave notifications; imported stories now show their import date and time in the story list."
   }
 }
