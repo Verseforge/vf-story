@@ -653,6 +653,96 @@ input.placeholder-scroll-covered::placeholder{color:transparent!important;opacit
 .preview-status-panel .panel-category-toggle{color:var(--pv-muted)}.preview-status-panel .panel-category-toggle:focus-visible{outline-color:var(--pv-accent)}
 #nodesPage .nodes-chapter-context{margin-bottom:8px}#nodesPage .search-row{margin-bottom:9px}
 .information-variant-tools{display:flex;align-items:center;gap:8px;flex:none}.information-variant-tools>button:disabled{opacity:.4;cursor:default}.information-card-delete{color:var(--danger)!important;flex:none;margin-left:auto}.information-card-delete .svg-icon{stroke-width:3}.information-variant-card>.entity-section-head{display:flex;align-items:center;gap:8px}.information-order-card{min-height:46px;display:flex;align-items:center}.information-order-card>strong{min-width:0;overflow-wrap:anywhere}
+.ui-field-card .entity-template-field-head {
+  display: block;
+  padding-right: 36px;
+}
+.ui-field-card .entity-template-field-options {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  align-items: center;
+}
+.ui-field-card .entity-template-field-options > .ui-select-segments {
+  grid-column: 1 / -1;
+}
+.ui-field-card .entity-template-field-options > label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+.ui-field-card .entity-template-field-options > label > .logic-select-shell {
+  flex: 1 1 0;
+}
+.ui-field-card .logic-select-button {
+  padding-inline: 9px;
+}
+.ui-field-card .entity-field-initial {
+  margin-top: 9px;
+}
+.ui-field-card .entity-field-initial > input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--input-bg);
+  padding: 10px 9px;
+}
+#uiEntityRules, #entityTemplateEditorLayer .ui-field-rules-shortcut {
+  margin-top: 12px;
+}
+.modal-layer .modal-scroll .ui-dependency-row > :is(select, .logic-select-shell),
+.modal-layer .ui-route-form .dependency-picker > :is(select, .logic-select-shell) {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  width: 100%;
+  min-width: 0;
+}
+.modal-layer .modal-scroll .ui-dependency-row > .dependency-create-btn,
+.modal-layer .ui-route-form .dependency-picker > .dependency-create-btn {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+}
+.modal-layer .modal-scroll .ui-logic-row.entity-rule-condition-row > :is([data-rule-field], .logic-select-for-entity-field) {
+  grid-column: 1 / 3 !important;
+  grid-row: 1 !important;
+}
+.modal-layer .modal-scroll .ui-logic-row.entity-rule-condition-row > :is([data-rule-op], .logic-select-for-operator) {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+}
+.modal-layer .modal-scroll .ui-logic-row.entity-rule-condition-row > .condition-value-editor {
+  grid-column: 2 / 4 !important;
+  grid-row: 2 !important;
+}
+.modal-layer .ui-route-form .state-route-variable-row > .logic-select-for-operator {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+}
+.modal-layer .ui-route-form .state-route-entity-row > .logic-select-for-entity-field {
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+}
+.modal-layer .ui-route-form .state-route-entity-row > .logic-select-for-operator {
+  grid-column: 1 !important;
+  grid-row: 3 !important;
+}
+.achievement-variable-controls > .dependency-picker {
+  min-width: 0;
+}
+@media (max-width: 620px) {
+  .achievement-variable-controls {
+    grid-template-columns: 82px minmax(0, 1fr);
+  }
+  .achievement-variable-controls > .dependency-picker {
+    grid-column: 1 / -1;
+  }
+  .achievement-variable-controls > input {
+    grid-column: 2;
+  }
+}
 </style>
 <!-- A stable hosted PNG lets search crawlers fetch an icon; the original embedded icons below remain available in a standalone file. -->
 <link rel="icon" type="image/png" sizes="96x96" href="./assets/icons/favicon-96x96.png" data-search-icon />
@@ -1474,7 +1564,7 @@ html[lang^="zh"] #nodeTitleAlignmentLabel{margin-inline-end:-.4em}
 </script>
 <script>
 // Release baseline: preserve v1 data and introduce explicit migrations before changing a persisted schema.
-const VF_RELEASE=Object.freeze({appVersion:'1.1.4',storyVersion:1,materialVersion:1,editorSchema:1,statusPanelSchema:1,backupVersion:1,themeVersion:1,dbVersion:1,storageNamespace:'v1'});
+const VF_RELEASE=Object.freeze({appVersion:'1.1.5',storyVersion:1,materialVersion:1,editorSchema:1,statusPanelSchema:1,backupVersion:1,themeVersion:1,dbVersion:1,storageNamespace:'v1'});
 // Public metadata is English independently of the editor language.
 const VF_PUBLIC_METADATA=Object.freeze({"title":"Verseforge Story | Interactive Fiction Editor","description":"Create branching stories with a visual editor, variables, conditions, and live preview. Work offline and export standalone HTML games. Chinese and English UI."});
 const VF_STORAGE=Object.freeze({database:'vfstory_editor_'+VF_RELEASE.storageNamespace,language:'vfstory_editor_language_'+VF_RELEASE.storageNamespace});
@@ -7338,8 +7428,8 @@ const VF_MESSAGES=[
     "Variable no longer exists"
   ],
   [
-    "<div class=\"entity-field-orderbar\"><button class=\"entity-field-order-handle\" type=\"button\" aria-label=\"\u62d6\u52a8\u8c03\u6574\u5b57\u6bb5\u987a\u5e8f\">\u283f</button><span>\u62d6\u52a8\u8c03\u6574\u5b57\u6bb5\u5728\u73a9\u5bb6\u5b9e\u4f53\u8be6\u60c5\u4e2d\u7684\u663e\u793a\u987a\u5e8f</span></div><div class=\"entity-field-grid\"><div class=\"dependency-picker\" data-variable-wrap><select data-entity-variable>VFINTERPOLATION_0</select><button class=\"dependency-create-btn\" data-new-variable type=\"button\">\uff0b \u65b0\u5efa</button></div><input data-entity-value maxlength=\"160\" value=\"VFINTERPOLATION_1\" placeholder=\"\u521d\u59cb\u503c\"><select data-entity-mutable><option value=\"fixed\" VFINTERPOLATION_2>\u56fa\u5b9a</option><option value=\"mutable\" VFINTERPOLATION_3>\u53ef\u4fee\u6539</option></select><select data-entity-visible><option value=\"hidden\" VFINTERPOLATION_4>\u9690\u85cf</option><option value=\"visible\" VFINTERPOLATION_5>\u73a9\u5bb6\u53ef\u89c1</option></select><button class=\"logic-remove\" type=\"button\" aria-label=\"\u5220\u9664\u5b57\u6bb5\">\u00d7</button></div><div class=\"entity-field-meta\">VFINTERPOLATION_6</div>",
-    "<div class=\"entity-field-orderbar\"><button class=\"entity-field-order-handle\" type=\"button\" aria-label=\"Drag to reorder fields\">\u283f</button><span> Drag to reorder fields in the player's entity details </span></div><div class=\"entity-field-grid\"><div class=\"dependency-picker\" data-variable-wrap><select data-entity-variable>VFINTERPOLATION_0</select><button class=\"dependency-create-btn\" data-new-variable type=\"button\"> + New </button></div><input data-entity-value maxlength=\"160\" value=\"VFINTERPOLATION_1\" placeholder=\"Initial value\"><select data-entity-mutable><option value=\"fixed\" VFINTERPOLATION_2> Fixed </option><option value=\"mutable\" VFINTERPOLATION_3> Editable </option></select><select data-entity-visible><option value=\"hidden\" VFINTERPOLATION_4> Hidden </option><option value=\"visible\" VFINTERPOLATION_5> Visible to player </option></select><button class=\"logic-remove\" type=\"button\" aria-label=\"Delete field\">\u00d7</button></div><div class=\"entity-field-meta\">VFINTERPOLATION_6</div>"
+    "<div class=\"entity-field-orderbar\"><button class=\"entity-field-order-handle\" type=\"button\" aria-label=\"\u62d6\u52a8\u8c03\u6574\u5b57\u6bb5\u987a\u5e8f\">\u283f</button><span>\u62d6\u52a8\u8c03\u6574\u5b57\u6bb5\u5728\u73a9\u5bb6\u5b9e\u4f53\u8be6\u60c5\u4e2d\u7684\u663e\u793a\u987a\u5e8f</span></div><div class=\"entity-template-field-head\"><div class=\"dependency-picker\" data-variable-wrap><select data-entity-variable>VFINTERPOLATION_0</select><button class=\"dependency-create-btn\" data-new-variable type=\"button\">\uff0b \u65b0\u5efa</button></div><button class=\"logic-remove\" type=\"button\" aria-label=\"\u5220\u9664\u5b57\u6bb5\">\u00d7</button></div><div class=\"entity-template-field-options\"><select data-entity-mutable><option value=\"fixed\" VFINTERPOLATION_2>\u56fa\u5b9a</option><option value=\"mutable\" VFINTERPOLATION_3>\u53ef\u4fee\u6539</option></select><select data-entity-visible aria-label=\"\u73a9\u5bb6\u53ef\u89c1\u6027\"><option value=\"hidden\" VFINTERPOLATION_4>\u9690\u85cf</option><option value=\"visible\" VFINTERPOLATION_5>\u53ef\u89c1</option></select></div><div class=\"entity-field-initial\"><input data-entity-value maxlength=\"160\" value=\"VFINTERPOLATION_1\" placeholder=\"\u521d\u59cb\u503c\"></div><div class=\"entity-field-meta\">VFINTERPOLATION_6</div>",
+    "<div class=\"entity-field-orderbar\"><button class=\"entity-field-order-handle\" type=\"button\" aria-label=\"Drag to reorder fields\">\u283f</button><span> Drag to reorder fields in the player's entity details </span></div><div class=\"entity-template-field-head\"><div class=\"dependency-picker\" data-variable-wrap><select data-entity-variable>VFINTERPOLATION_0</select><button class=\"dependency-create-btn\" data-new-variable type=\"button\"> + New </button></div><button class=\"logic-remove\" type=\"button\" aria-label=\"Delete field\">\u00d7</button></div><div class=\"entity-template-field-options\"><select data-entity-mutable><option value=\"fixed\" VFINTERPOLATION_2> Fixed </option><option value=\"mutable\" VFINTERPOLATION_3> Editable </option></select><select data-entity-visible aria-label=\"Player visibility\"><option value=\"hidden\" VFINTERPOLATION_4> Hidden </option><option value=\"visible\" VFINTERPOLATION_5> Visible to player </option></select></div><div class=\"entity-field-initial\"><input data-entity-value maxlength=\"160\" value=\"VFINTERPOLATION_1\" placeholder=\"Initial value\"></div><div class=\"entity-field-meta\">VFINTERPOLATION_6</div>"
   ],
   [
     "\u5b9e\u4f53\u540d\u79f0\u7528\u4e8e\u7f16\u8f91\u5668\u8bc6\u522b\u548c\u663e\u793a\u3002",
@@ -7486,8 +7576,8 @@ const VF_MESSAGES=[
     "<div class=\"logic-empty\"> Add at least one condition. </div>"
   ],
   [
-    "<select data-rule-field>VFINTERPOLATION_0</select><select data-rule-op>VFINTERPOLATION_1</select>VFINTERPOLATION_2<button class=\"logic-remove\" type=\"button\" aria-label=\"\u5220\u9664\u6761\u4ef6\">\u00d7</button>",
-    "<select data-rule-field>VFINTERPOLATION_0</select><select data-rule-op>VFINTERPOLATION_1</select>VFINTERPOLATION_2<button class=\"logic-remove\" type=\"button\" aria-label=\"Delete condition\">\u00d7</button>"
+    "<select data-rule-field data-entity-field>VFINTERPOLATION_0</select><select data-rule-op data-operator>VFINTERPOLATION_1</select>VFINTERPOLATION_2<button class=\"logic-remove\" type=\"button\" aria-label=\"\u5220\u9664\u6761\u4ef6\">\u00d7</button>",
+    "<select data-rule-field data-entity-field>VFINTERPOLATION_0</select><select data-rule-op data-operator>VFINTERPOLATION_1</select>VFINTERPOLATION_2<button class=\"logic-remove\" type=\"button\" aria-label=\"Delete condition\">\u00d7</button>"
   ],
   [
     "\u6a21\u677f\u89c4\u5219\u63d0\u793a",
@@ -20299,7 +20389,6 @@ localizeStaticShell();
     }
     try {
       state.projects[index] = normalizeProject(payload.project);
-      if (payload.currentProjectId === projectId) state.currentProjectId = projectId;
       const base = storageRevision,
         next = base + 1;
       state._storageRevision = next;
@@ -21949,6 +22038,33 @@ localizeStaticShell();
       console.warn('[VF Story] announceStorageRevision: optional operation failed', error);
     }
   }
+  const LAST_OPEN_STORY_KEY = 'vfstory_last_open_story_v1';
+  function openEditorStory(projectId) {
+    state.currentProjectId = projectId;
+    state.preferences.lastOpenedStoryId = projectId;
+    try {
+      localStorage.setItem(LAST_OPEN_STORY_KEY, JSON.stringify({
+        projectId,
+        epoch: state.preferences.dataEpoch || ''
+      }));
+    } catch (error) {
+      console.warn('[VF Story] Could not remember the open story', error);
+    }
+  }
+  function restoreLastOpenEditorStory() {
+    let last;
+    try {
+      last = JSON.parse(localStorage.getItem(LAST_OPEN_STORY_KEY) || 'null');
+    } catch (error) {
+      console.warn('[VF Story] Could not read the last open story', error);
+    }
+    const localId = last?.epoch === (state.preferences.dataEpoch || '') ? last.projectId : '';
+    const savedId = [localId, state.preferences.lastOpenedStoryId].find(
+      id => id && state.projects.some(project => project.id === id)
+    );
+    if (savedId) state.currentProjectId = savedId;
+  }
+
   async function bootstrapStorage() {
     try {
       const dbState = await readEditorDbState();
@@ -21964,6 +22080,7 @@ localizeStaticShell();
       storageCommittedRevision = storageObservedRevision = storageRevision;
       refreshPersistedProjectSnapshots(state);
       await recoverPendingSaveIfSafe();
+      restoreLastOpenEditorStory();
       storageReady = true;
       refreshPersistedProjectSnapshots(state);
       initStorageSyncChannel();
@@ -34700,6 +34817,7 @@ localizeStaticShell();
     list.innerHTML = '';
     if (!achievementDraft.conditions.length) list.innerHTML = _tr(1313);else achievementDraft.conditions.forEach((c, i) => list.appendChild(renderAchievementConditionRow(c, i)));
     enhanceNodeSelects($('#achievementEditorLayer'));
+    enhanceLogicSelects(list);
   }
   function achievementIssues(p = currentProject()) {
     const issues = [];
@@ -36199,17 +36317,24 @@ localizeStaticShell();
     renderAll();
     toast(boundActions.length ? _tr(1486,[boundActions.length]) : _tr(1487));
   }
-  function entityRuleFieldOptions(entity, selected = '') {
-    return (entity?.fields || []).map(f => {
-      const v = variableById(f.variableId);
-      return v ? `<option value="${escapeHtml(v.id)}" ${v.id === selected ? 'selected' : ''}>${escapeHtml(variableDisplayName(v))} · ${escapeHtml(v.name)}</option>` : '';
-    }).join('');
+  function entityRuleVariables(entity) {
+    return (entity?.fields || []).map(field => variableById(field.variableId)).filter(Boolean);
+  }
+  function entityRuleFieldOptions(variables, selected = '') {
+    const options = variables.map(variable => {
+      const active = variable.id === selected ? ' selected' : '';
+      return `<option value="${escapeHtml(variable.id)}"${active}>${escapeHtml(variableDisplayName(variable))} · ${escapeHtml(variable.name)}</option>`;
+    });
+    if (!variables.some(variable => variable.id === selected)) {
+      const placeholder = variables.length ? uiText110('选择字段', 'Choose a field') : uiText110('请先添加字段', 'Add a field first');
+      options.unshift(`<option value="" disabled selected>${escapeHtml(placeholder)}</option>`);
+    }
+    return options.join('');
   }
   function defaultEntityRuleCondition(entity) {
-    const f = entity?.fields?.[0],
-      v = f ? variableById(f.variableId) : null;
+    const v = entityRuleVariables(entity)[0];
     return {
-      variableId: f?.variableId || '',
+      variableId: v?.id || '',
       operator: 'eq',
       compareValue: v?.valueType === 'number' ? '0' : ''
     };
@@ -36271,9 +36396,14 @@ localizeStaticShell();
     const owner = entityRuleTemplateMode ? entityTemplateDraft : ui110EntityRulesDraftMode ? entityDraft : entityById(entityRuleEntityId),
       host = $('#entityRuleList');
     if (!owner || !host || !entityRuleDraft) return;
-    host.innerHTML = '';
+    const fields = entityRuleVariables(owner);
+    const needsField = fields.length === 0;
+    $('#addEntityRuleBtn').disabled = needsField;
+    host.innerHTML = needsField
+      ? '<p class="hint">' + escapeHtml(uiText110('请先返回并添加字段，再设置字段规则。', 'Go back and add a field before setting field rules.')) + '</p>'
+      : '';
     if (!entityRuleDraft.length) {
-      host.innerHTML = _tr(1493,[entityRuleTemplateMode ? _tr(1492) : uiText('entity')]);
+      if (!needsField) host.innerHTML = _tr(1493,[entityRuleTemplateMode ? _tr(1492) : uiText('entity')]);
       return;
     }
     entityRuleDraft.forEach((rule, index) => {
@@ -36288,8 +36418,10 @@ localizeStaticShell();
         if (v?.valueType !== 'number' && !['eq', 'neq'].includes(c.operator)) c.operator = 'eq';
         row.className = 'entity-rule-condition-row';
         const targetType = v?.valueType === 'number' ? 'number' : 'text';
-        row.innerHTML = _tr(1500,[entityRuleFieldOptions(owner, c.variableId),entityRuleOperatorOptions(c.variableId, c.operator),conditionCompareEditorHtml(c, targetType)]);
-        $('[data-rule-field]', row).onchange = e => {
+        row.innerHTML = _tr(1500,[entityRuleFieldOptions(fields, c.variableId),entityRuleOperatorOptions(c.variableId, c.operator),conditionCompareEditorHtml(c, targetType)]);
+        const fieldPicker = $('[data-rule-field]', row);
+        fieldPicker.disabled = needsField;
+        fieldPicker.onchange = e => {
           c.variableId = e.target.value;
           c.operator = 'eq';
           c.compareValue = variableById(c.variableId)?.valueType === 'number' ? '0' : '';
@@ -36302,11 +36434,15 @@ localizeStaticShell();
           renderEntityRuleManager();
         };
         condHost.appendChild(row);
+        ui110LogicLayout(row);
       });
       const effectHost = $('[data-rule-effects]', card);
       renderEffectRows(effectHost, rule.effects, () => renderEntityRuleManager(), !entityRuleTemplateMode);
       $$('[data-rule-mode]',card).forEach(input=>input.onchange=()=>{if(input.checked)rule.mode=input.value==='any'?'any':'all'});
-      $('[data-add-condition]', card).onclick = () => {
+      const addCondition = $('[data-add-condition]', card);
+      addCondition.disabled = needsField;
+      addCondition.onclick = () => {
+        if (needsField) return;
         rule.conditions.push(defaultEntityRuleCondition(owner));
         renderEntityRuleManager();
       };
@@ -40984,7 +41120,7 @@ localizeStaticShell();
             render: false
           });
         }
-        state.currentProjectId = p.id;
+        openEditorStory(p.id);
         selectedNodeId = null;
         previewHistory = [];
         previewNodeId = null;
@@ -40992,7 +41128,8 @@ localizeStaticShell();
         currentTestScenarioContext = null;
         updatePreviewRecordButtons();
         if (changed) resetEditHistory();
-        saveState();
+        if (hasUnsavedStoryChanges()) saveState();
+        else savePreferencesOnly();
 
         setPage('graph');
         renderAll();
@@ -41039,10 +41176,10 @@ localizeStaticShell();
         if (replacedLast) {
           const blank = buildBlankStoryProject(uiText('newStory'));
           state.projects.push(blank);
-          state.currentProjectId = blank.id;
+          openEditorStory(blank.id);
           selectedNodeId = blank.openingNodeId;
         } else if (state.currentProjectId === p.id) {
-          state.currentProjectId = state.projects[0].id;
+          openEditorStory(state.projects[0].id);
           selectedNodeId = null;
         }
         previewNodeId = null;
@@ -41083,7 +41220,7 @@ localizeStaticShell();
     copy.versions = [];
     copy.autoVersion = null;
     state.projects.push(copy);
-    state.currentProjectId = copy.id;
+    openEditorStory(copy.id);
     selectedNodeId = null;
     previewHistory = [];
     previewNodeId = null;
@@ -42942,7 +43079,7 @@ localizeStaticShell();
       if (idx >= 0) state.projects[idx] = fresh;
       state.preferences.graphViewportByProject = state.preferences.graphViewportByProject || {};
       delete state.preferences.graphViewportByProject[fresh.id];
-      state.currentProjectId = fresh.id;
+      openEditorStory(fresh.id);
       selectedNodeId = fresh.openingNodeId;
       previewNodeId = null;
       previewHistory = [];
@@ -42966,7 +43103,7 @@ localizeStaticShell();
     state.projects.push(p);
     state.preferences.graphViewportByProject = state.preferences.graphViewportByProject || {};
     delete state.preferences.graphViewportByProject[p.id];
-    state.currentProjectId = p.id;
+    openEditorStory(p.id);
     selectedNodeId = p.openingNodeId;
     previewNodeId = null;
     previewHistory = [];
@@ -42989,7 +43126,7 @@ localizeStaticShell();
     const name = $('#newStoryName').value.trim() || uiText('newStory'),
       p = buildBlankStoryProject(name);
     state.projects.push(p);
-    state.currentProjectId = p.id;
+    openEditorStory(p.id);
     selectedNodeId = p.openingNodeId;
     previewNodeId = null;
     resetEditHistory();
@@ -43429,7 +43566,7 @@ localizeStaticShell();
       latest.preferences.storyOrder=latest.projects.map(p=>p.id);
       const actual=Number(latest._storageRevision)||0;
       const revision=await persistStateSnapshot(latest,actual,{baseSnapshot:baseline});
-      state=latest;storageRevision=storageCommittedRevision=storageObservedRevision=revision;
+      state=latest;openEditorStory(copy.id);storageRevision=storageCommittedRevision=storageObservedRevision=revision;
       storageExternalConflict=false;storageConflictActive=false;storageUnsavedChanges=false;storageLastQueuedSignature='';
       refreshPersistedProjectSnapshots(state);announceStorageRevision(revision);setStorageStatus(false);
       if(activeAlt&&$('#nodeAltBodiesLayer')&&altBodyProjectId===activeAlt.projectId&&altBodyEditingNodeId===activeAlt.nodeId){
@@ -43596,7 +43733,7 @@ localizeStaticShell();
         state.preferences.customThemes = library;
         state.projects.push(p);
         syncSharedCustomThemeShadows();
-        state.currentProjectId = p.id;
+        openEditorStory(p.id);
         selectedNodeId = null;
         resetEditHistory();
         saveState();
@@ -48478,7 +48615,7 @@ localizeStaticShell();
     $('#saveEntityRuleBtn').onclick = saveEntityRuleManager;
     $('#addEntityRuleBtn').onclick = () => {
       const owner = entityRuleTemplateMode ? entityTemplateDraft : ui110EntityRulesDraftMode ? entityDraft : entityById(entityRuleEntityId);
-      if (!owner || !entityRuleDraft) return;
+      if (!owner || !entityRuleDraft || !entityRuleVariables(owner).length) return;
       const rule = defaultEntityRule(owner);
       if (entityRuleTemplateMode) (rule.effects || []).forEach(e => {
         if (e.kind === 'entity') e.entityId = 'current';
@@ -49302,7 +49439,7 @@ saveMemoryEditor=editorActionTransaction(saveMemoryEditor,'save','project','memo
     const next=result.state;next.projects.forEach(p=>{p.autoVersion=null;p.versions=[]});next.preferences.dataEpoch=uid();return next;
   }
   function editorLocalKeys(){
-    const result=[];for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(/^vfstory_(?:preview_|state_recovery_|conflict_recovery_|pending_save_|idb_signal_|coverage_|editor_language_)/.test(key||''))result.push(key)}return result;
+    const result=[];for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(/^vfstory_(?:preview_|state_recovery_|conflict_recovery_|pending_save_|idb_signal_|coverage_|editor_language_|last_open_story_)/.test(key||''))result.push(key)}return result;
   }
   async function commitEditorReplacement(next,expectedRevision){
     const db=await openEditorDb();
@@ -49683,7 +49820,7 @@ function compactPlayerCss(published=false){
     }
     for(const b of body.querySelectorAll('.dependency-create-btn')){
       b.textContent='＋';b.setAttribute('aria-label',uiText110('新建','New'));const parent=b.parentElement;
-      if(parent&&parent.querySelector(':scope > select,:scope > .node-picker'))parent.classList.add('ui-dependency-row');
+      if(parent&&parent.querySelector(':scope > select,:scope > .node-picker,:scope > .logic-select-shell'))parent.classList.add('ui-dependency-row');
     }
     alignConditionModeControls(body);
     for(const b of body.querySelectorAll('.logic-remove'))b.setAttribute('aria-label',uiText110('删除这一项','Delete this item'));
@@ -49915,8 +50052,10 @@ function compactPlayerCss(published=false){
           let label=mutable.closest('label');if(!label){label=document.createElement('label');mutable.before(label);label.append(document.createTextNode(''),mutable);}if(label){const text=[...label.childNodes].find(n=>n.nodeType===Node.TEXT_NODE);if(text)text.textContent=uiText110('取值规则','Value rule');}}
         for(const b of row.querySelectorAll('[data-new-variable],[data-new-template-variable]')){b.textContent='＋';b.classList.add('ui-dependency-create');b.setAttribute('aria-label',uiText110('新建变量','New variable'));b.parentElement.classList.add('ui-dependency-row');}
         if(template)ui110Segment(row.querySelector('[data-template-source]'));
+        enhanceLogicSelects(row);
       }
-      const rules=$('#'+prefix+'RulesBtn');if(rules)ui110Shortcut(ui110Field(rules.id),rules,uiText110('字段规则','Field rules'),uiText110('字段满足条件时执行变化','Apply effects when field conditions match'),draft?.rules?.length?[{text:String(draft.rules.length)}]:[]);
+      const rules=$('#'+prefix+'RulesBtn');if(rules)ui110Field(rules.id)?.classList.add('ui-field-rules-shortcut');
+      if(rules)ui110Shortcut(ui110Field(rules.id),rules,uiText110('字段规则','Field rules'),uiText110('字段满足条件时执行变化','Apply effects when field conditions match'),draft?.rules?.length?[{text:String(draft.rules.length)}]:[]);
     }
     ui110CommonSystemForms();
   }
@@ -50009,6 +50148,9 @@ function compactPlayerCss(published=false){
     for(const b of body.querySelectorAll('[data-new-route-memory],[data-new-route-variable],[data-new-route-entity]')){b.textContent='＋';b.setAttribute('aria-label',uiText110('新建','New'));}
     for(const b of body.querySelectorAll('[data-add-condition],[data-add-memory]'))b.classList.add('ui-list-add');
     ui110BodySections(ctx.layer);
+    for (const select of body.querySelectorAll('[data-route-operator]')) select.setAttribute('data-operator', '');
+    for (const select of body.querySelectorAll('[data-route-entity-field]')) select.setAttribute('data-entity-field', '');
+    enhanceLogicSelects(body);
   }
 
   function ui110FooterMenu(layer,buttons,items){
@@ -50152,7 +50294,7 @@ function compactPlayerCss(published=false){
   }
   function ui110LogicLayout(root){
     if(!root)return;
-    const rows=[...(root.matches?.('.condition-row,.logic-row.effect')?[root]:[]),...root.querySelectorAll('.condition-row,.logic-row.effect')];
+    const rows=[...(root.matches?.('.condition-row,.logic-row.effect,.entity-rule-condition-row')?[root]:[]),...root.querySelectorAll('.condition-row,.logic-row.effect,.entity-rule-condition-row')];
     decorateTimerValueUnits(root);
     for(const row of rows){row.classList.add('ui-logic-row');for(const b of row.querySelectorAll(':scope > .dependency-picker > .dependency-create-btn')){b.textContent='＋';b.setAttribute('aria-label',uiText110('新建','New'));}enhanceLogicSelects(row);}
   }
@@ -50935,7 +51077,7 @@ function compactPlayerCss(published=false){
   }
   function enhanceLogicSelects(root) {
     for(const select of root.querySelectorAll('select')){
-      if(select.closest('.node-picker')||select.matches('[data-node-picker]')||select.multiple||select.size>1)continue;
+      if(select.classList.contains('ui-hidden-control')||select.closest('.node-picker')||select.matches('[data-node-picker]')||select.multiple||select.size>1)continue;
       if(select.__vfLogicPicker){select.__vfLogicPicker();continue;}
       const shell=document.createElement('span'),button=document.createElement('button'),text=document.createElement('span'),arrow=document.createElement('span');shell.className='logic-select-shell';for(const name of ['type','kind','operator','action','entity-field'])if(select.hasAttribute('data-'+name))shell.classList.add('logic-select-for-'+name);button.className='logic-select-button';button.type='button';button.setAttribute('aria-haspopup','listbox');button.setAttribute('aria-expanded','false');text.className='logic-selected-text';arrow.className='logic-select-arrow';arrow.setAttribute('aria-hidden','true');arrow.innerHTML=disclosureChevron();
       select.before(shell);shell.append(select,button);button.append(text,arrow);select.classList.add('logic-native-select');select.tabIndex=-1;select.setAttribute('aria-hidden','true');
