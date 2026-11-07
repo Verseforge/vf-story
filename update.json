@@ -1,8 +1,8 @@
 {
-  "versionCode": 13,
-  "versionName": "1.1.4",
+  "versionCode": 14,
+  "versionName": "1.1.5",
   "notes": {
-    "zh-CN": "修复故事面板自动保存提示频繁弹出的问题，导入故事在列表中统一显示本次导入的日期和时刻。",
-    "en": "Fixed excessive story panel autosave notifications; imported stories now show their import date and time in the story list."
+    "zh-CN": "重进时默认打开最后打开的故事，修复了个别 UI 显示问题。",
+    "en": "Reopening the app now defaults to the last opened story, and a few UI display issues have been fixed."
   }
 }
