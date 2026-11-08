@@ -8,7 +8,7 @@
 
 Verseforge Story 是一个面向个人创作者的本地文游编辑器。通过节点与分支组织剧情，搭配变量、记忆、实体和条件，制作可以实际游玩的互动故事，再导出为独立 HTML 文件。
 
-编辑器采用单文件形式，不需要安装依赖、注册账号或连接后端服务。可以在浏览器中本地打开，也可以直接访问网页版：https://story.verseforges.com 。支持中英文界面，内置两个语言版本的示例故事《零点列车》，可用于体验故事机制和查看设置方式。
+编辑器采用单文件形式，不需要安装依赖、注册账号或连接后端服务。可以在浏览器中本地打开，也可以直接使用[网页版](https://story.verseforges.com)。支持中英文界面，内置两个语言版本的示例故事《零点列车》，可用于体验故事机制和查看设置方式。
 
 ### 功能
 
@@ -21,19 +21,15 @@ Verseforge Story 是一个面向个人创作者的本地文游编辑器。通过
 
 ### 使用方式
 
-1. 使用浏览器打开编辑器 HTML 文件，或直接访问网页版：https://story.verseforges.com 。
+1. 使用浏览器打开编辑器 HTML 文件，或直接使用[网页版](https://story.verseforges.com)。
 2. 打开内置示例查看效果，或新建自己的故事。
 3. 编写节点正文、连接分支，并按需添加故事机制。
 4. 在预览中试玩，结合故事检验和作者测试工具检查各条路径。
 5. 导出独立故事 HTML，交给读者使用浏览器打开游玩。
 
-标签页 SVG / PNG 和 Apple 主屏幕图标继续内嵌，“关于”中的产品标志在单个 HTML 文件中也能显示。网页版另提供 `./assets/icons/favicon-96x96.png` 的外部图标声明，供搜索引擎抓取；PWA 安装图标与分享图片也使用外部文件。
+单文件编辑器内嵌标签页图标、Apple 主屏幕图标和“关于”中的产品标志。网页版使用外部文件提供搜索引擎图标、PWA 安装图标和分享图片。
 
-部署时将网页版文件命名为 `index.html`，与 `site.webmanifest`、`sw.js`、`CNAME` 同级，完整图标目录为 `assets/icons/`。正式域名为 https://story.verseforges.com/ ，资源和下载路径不带 `/story/`。编辑器默认简体中文，首次可选择语言，之后可在设置中修改；搜索介绍、标题与社媒分享信息固定使用英文。
-
-### 从旧网址迁移
-
-原网址 https://verseforges.com/story/ 保留 1.0.4 供继续使用，不再维护编辑器。新旧网址的本地数据不会自动同步。需要迁移时，在旧站菜单 → 编辑器设置中导出编辑器备份，再到新站恢复备份。恢复会替换新站当前数据；备份不包含本地保存版本，需要的历史版本请单独导出。旧站数据不会因访问新站而被删除。
+部署时将网页版文件命名为 `index.html`，与 `site.webmanifest`、`sw.js`、`CNAME` 同级，并保留 `assets/icons/` 目录。编辑器默认使用简体中文，首次打开时可选择语言，也可在设置中切换。网页标题、搜索简介和社媒分享信息使用英文。
 
 ### Android 应用
 
@@ -60,7 +56,6 @@ Android 应用与网页版的数据分别保存在各自的本地环境中，不
 
 ### 联系与反馈
 
-- GitHub Issues：[提交问题](https://github.com/Verseforge/vf-story/issues)
 - 用户反馈表（飞书多维表格）：[填写反馈](https://ncnviye1gx54.feishu.cn/share/base/form/shrcnhqCTlE1nLDngroYfDYrvCg)
 - 邮箱：verseforge@foxmail.com / verseforge.sj@gmail.com
 
@@ -70,7 +65,7 @@ Android 应用与网页版的数据分别保存在各自的本地环境中，不
 
 Verseforge Story is a local interactive fiction editor for individual creators. Organize your story with nodes and branches, add variables, memories, entities, and conditions, then export a standalone HTML file that readers can play in a browser.
 
-The editor runs from a single HTML file, with no dependency installation, account, or backend required. Open it locally in a browser, or use the web version at https://story.verseforges.com . It includes Chinese and English interfaces, along with both language versions of the built-in example, *The Midnight Train*, for exploring story mechanics and their configuration.
+The editor runs from a single HTML file, with no dependency installation, account, or backend required. Open it locally in a browser, or use the [web version](https://story.verseforges.com). It includes Chinese and English interfaces, along with both language versions of the built-in example, *The Midnight Train*, for exploring story mechanics and their configuration.
 
 ### Features
 
@@ -83,19 +78,15 @@ The editor runs from a single HTML file, with no dependency installation, accoun
 
 ### How to use
 
-1. Open the editor HTML file in a browser, or use the web version at https://story.verseforges.com .
+1. Open the editor HTML file in a browser, or use the [web version](https://story.verseforges.com).
 2. Explore the built-in example or create a new story.
 3. Write node text, connect branches, and add mechanics as needed.
 4. Play through the preview and check your paths with story inspection and author testing tools.
 5. Export a standalone story HTML file for readers to open and play in a browser.
 
-The SVG / PNG tab icons and Apple home-screen icon remain embedded, and the About logo is available in a standalone HTML file. The website also declares the external `./assets/icons/favicon-96x96.png` for search crawlers; PWA installation icons and social sharing images use external files.
+The single-file editor includes embedded browser tab icons, an Apple home-screen icon, and the logo shown in About. The website uses external files for its search favicon, PWA installation icons, and social sharing images.
 
-For deployment, name the web editor `index.html` and keep `site.webmanifest`, `sw.js`, and `CNAME` beside it, with the complete `assets/icons/` directory. The official address is https://story.verseforges.com/ ; resource and download paths have no `/story/` prefix. The editor defaults to Simplified Chinese, offers an initial language choice, and allows switching in Settings. Public search descriptions, page titles, and social sharing metadata stay in English.
-
-### Moving from the old address
-
-The previous address, https://verseforges.com/story/ , remains available as the unmaintained 1.0.4 editor. Browser data does not sync between the two addresses. Export an editor backup from Menu → Editor settings on the old site, then restore it on the new site. Restoring replaces data currently held on the new site. Editor backups exclude saved local versions; export any historical versions you need separately. Visiting the new site does not delete old-site data.
+For deployment, name the web editor `index.html` and keep `site.webmanifest`, `sw.js`, and `CNAME` beside it, along with the `assets/icons/` directory. The editor defaults to Simplified Chinese. Choose a language on first launch or switch it in Settings. Page titles, search descriptions, and social sharing metadata use English.
 
 ### Android app
 
@@ -122,7 +113,6 @@ Updates are prepared in the background without forcing a reload while you edit. 
 
 ### Contact and feedback
 
-- GitHub Issues: [Report a problem](https://github.com/Verseforge/vf-story/issues)
 - User feedback form (Lark Forms): [Send feedback](https://ncnviye1gx54.feishu.cn/share/base/form/shrcnhqCTlE1nLDngroYfDYrvCg)
 - Email: verseforge@foxmail.com / verseforge.sj@gmail.com
 
