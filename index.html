@@ -1564,7 +1564,7 @@ html[lang^="zh"] #nodeTitleAlignmentLabel{margin-inline-end:-.4em}
 </script>
 <script>
 // Release baseline: preserve v1 data and introduce explicit migrations before changing a persisted schema.
-const VF_RELEASE=Object.freeze({appVersion:'1.1.5',storyVersion:1,materialVersion:1,editorSchema:1,statusPanelSchema:1,backupVersion:1,themeVersion:1,dbVersion:1,storageNamespace:'v1'});
+const VF_RELEASE=Object.freeze({appVersion:'1.1.6',storyVersion:1,materialVersion:1,editorSchema:1,statusPanelSchema:1,backupVersion:1,themeVersion:1,dbVersion:1,storageNamespace:'v1'});
 // Public metadata is English independently of the editor language.
 const VF_PUBLIC_METADATA=Object.freeze({"title":"Verseforge Story | Interactive Fiction Editor","description":"Create branching stories with a visual editor, variables, conditions, and live preview. Work offline and export standalone HTML games. Chinese and English UI."});
 const VF_STORAGE=Object.freeze({database:'vfstory_editor_'+VF_RELEASE.storageNamespace,language:'vfstory_editor_language_'+VF_RELEASE.storageNamespace});
@@ -27588,11 +27588,24 @@ localizeStaticShell();
     renderGraphQuickTools();
     toast(state.preferences.showGraphTags ? _tr(709) : _tr(710));
   }
+  let nodeEditorOpenId = null, nodeEditorReturnScrollTop = null;
+  function rememberNodeEditorScroll() {
+    if (nodeEditorReturnScrollTop !== null || els.editorLayer.classList.contains('hidden')) return;
+    nodeEditorReturnScrollTop = $('.modal-scroll', els.editorLayer)?.scrollTop ?? null;
+  }
   function openEditor() {
     if (coverageWriteBlocked()) return;
-    if (!selectedNode()) return;
+    const node = selectedNode();
+    if (!node) return;
+    const layer = els.editorLayer;
+    const reopening = layer.classList.contains('hidden') && !layer.classList.contains('dependency-suspended');
+    const fresh = reopening || nodeEditorOpenId !== node.id;
+    if (fresh) nodeEditorReturnScrollTop = null;
+    nodeEditorOpenId = node.id;
     renderEditor();
-    els.editorLayer.classList.remove('hidden');raiseEditorLayer(els.editorLayer);
+    layer.classList.remove('hidden');
+    raiseEditorLayer(layer);
+    if (fresh) $('.modal-scroll', layer).scrollTop = 0;
   }
   function unresolvedTextVariables(text, node = selectedNode(), p = currentProject()) {
     const storyNames = new Set((p.variables || []).map(v => String(v.name || '').toLowerCase())),
@@ -27749,6 +27762,7 @@ localizeStaticShell();
         toast(_tr(726,[cleaned.rules + cleaned.targets]));
       }
     }
+    nodeEditorReturnScrollTop = null;
     els.editorLayer.classList.add('hidden');
   }
   function numberedEditorName(base,index) {return String(base)+(VF_LANG==='en'?' ':'')+index;}
@@ -34243,6 +34257,7 @@ localizeStaticShell();
     if (typeof options.beforeOpen === 'function') options.beforeOpen();
     const layer = typeof parentLayer === 'string' ? $(parentLayer) : parentLayer,
       parentWasHidden = Boolean(layer?.classList.contains('hidden'));
+    if (layer === els.editorLayer) rememberNodeEditorScroll();
     if (layer) layer.classList.add('dependency-suspended', 'hidden');
     dependencyCreateStack.push({
       kind,
@@ -36249,7 +36264,7 @@ localizeStaticShell();
     snapshot();
     const normalized = normalizeEntities([{
       ...entityDraft,
-      id: editingEntityId || uid(),
+      id: entityDraft.id,
       createdAt: existing?.createdAt || nowIso()
     }], p.variables)[0];
     if (existing) Object.assign(existing, normalized);else {
@@ -36370,7 +36385,7 @@ localizeStaticShell();
     entityRuleEntityId = entityId;
     entityRuleDraft = JSON.parse(JSON.stringify(normalizeEntityRules(entity.rules, entity.fields)));
     $('#entityRuleHeading').textContent = entityDisplayName(entity) + _tr(1488);
-    $('#entityRuleHelp').textContent = _tr(1489);
+    $('#entityRuleHelp').textContent = uiText110('这里检查的是这个实体自己的字段值。字段从不满足变为满足时触发。若要根据全局故事变量触发，请用「状态响应」。','These rules check this entity’s own field values and run when a condition becomes true. To react to a global story variable, use Reactions.');
     renderEntityRuleManager();
     $('#entityRuleLayer').classList.remove('hidden');raiseEditorLayer($('#entityRuleLayer'));
   }
@@ -47766,6 +47781,7 @@ localizeStaticShell();
   }
   function raiseEditorLayer(layer) {
     if(!layer?.classList.contains('modal-layer')||layer.classList.contains('hidden'))return;
+    if (layer !== els.editorLayer) rememberNodeEditorScroll();
     rememberModalFocus(layer);
     layer.classList.toggle('drawer-modal',!els.storyDrawerLayer.classList.contains('hidden'));
     // Remember the opening context; revealing a parent must not restart its scrim animation.
@@ -47774,7 +47790,7 @@ localizeStaticShell();
       if(nested||!editorLayerOrder.has(layer))layer.classList.toggle('vf-modal-nested',nested);
     }
     const remember=new Set(['vfPreviewDebugModalLayer','storySystemsLayer','memoryLayer','variableLayer','entityLayer','eventPoolLayer','effectGroupLayer','stateResponseLayer','stateRouteLayer','entityActionLayer','statusPanelLayer','achievementLayer']);
-    if(!remember.has(layer.id)&&!layer.id.startsWith('preview')){
+    if(layer!==els.editorLayer&&!remember.has(layer.id)&&!layer.id.startsWith('preview')){
       for(const scroller of layer.querySelectorAll('.modal-scroll'))scroller.scrollTop=0;
     }
     if(!layer.id&&!dynamicDraftBaselines.has(layer))dynamicDraftBaselines.set(layer,dynamicDraftValue(layer));
@@ -47850,6 +47866,10 @@ localizeStaticShell();
     }
     syncModalFocus(layers);
     syncKeyboardShift();
+    if (top === els.editorLayer && nodeEditorReturnScrollTop !== null) {
+      $('.modal-scroll', els.editorLayer).scrollTop = nodeEditorReturnScrollTop;
+      nodeEditorReturnScrollTop = null;
+    }
     syncModalCloseHint();
     if (storageSyncDeferred && !layers.length) scheduleExternalStorageSync();
     maybeStartStoryCreationGuide();
@@ -50210,8 +50230,8 @@ function compactPlayerCss(published=false){
     }
   }
   async function ui110CategoryEmpty(cat,achievement=false){
-    const initial={text:cat.emptyText||'',hide:!!cat.hideWhenEmpty},layer=makeEditorDynamicLayer(uiText110('空状态文案','Empty state message'),(achievement?'':'<label class="round-check-row"><input type="checkbox" data-hide><span></span>'+escapeHtml(uiText110('无内容时隐藏分类','Hide category when empty'))+'</label>')+'<div class="field"><label>'+escapeHtml(uiText110('提示文字','Message'))+'</label><input data-text maxlength="80"></div>','<button class="text-btn" data-discard>'+escapeHtml(uiText110('取消','Cancel'))+'</button><button class="primary-btn" data-save>'+escapeHtml(uiText110('保存','Save'))+'</button>');
-    layer.classList.add('ui-empty-state-editor');layer.dataset.ownDraftGuard='true';const text=$('[data-text]',layer),hide=$('[data-hide]',layer);text.value=initial.text;if(hide){hide.checked=initial.hide;text.disabled=hide.checked;hide.onchange=()=>text.disabled=hide.checked;}
+    const initial={text:cat.emptyText||'',hide:!!cat.hideWhenEmpty},layer=makeEditorDynamicLayer(uiText110('空状态文案','Empty state message'),(achievement?'':'<label class="round-check-row"><input type="checkbox" data-hide><span></span>'+escapeHtml(uiText110('无内容时隐藏分类','Hide category when empty'))+'</label>')+'<div class="field"><label>'+escapeHtml(uiText110('提示文字','Message'))+'</label><input data-text maxlength="80"></div>','<button class="text-btn" data-discard>'+escapeHtml(uiText110('取消','Cancel'))+'</button><button class="primary-btn" data-save>'+escapeHtml(uiText110('保存','Save'))+'</button>','ui-empty-state-editor short-input-dialog');
+    layer.dataset.ownDraftGuard='true';const text=$('[data-text]',layer),hide=$('[data-hide]',layer);text.value=initial.text;if(hide){hide.checked=initial.hide;text.disabled=hide.checked;hide.onchange=()=>text.disabled=hide.checked;}
     const read=()=>({text:text.value,hide:!!hide?.checked});$('[data-discard]',layer).onclick=()=>layer.remove();$('[data-cancel]',layer).onclick=async()=>{if(JSON.stringify(read())!==JSON.stringify(initial)&&!await confirmDialog(uiText('discardQuestion'),uiText110('空状态文案还没保存。','The empty state message has unsaved changes.'),uiText('discard'),true))return;layer.remove();};
     $('[data-save]',layer).onclick=editorActionTransaction(async()=>{
       if(achievement){const p=currentProject(),live=p.achievementCategories.find(c=>c.id===cat.id);if(!live)return;const before=live.emptyText;snapshot();live.emptyText=text.value.trim()||uiText('noUnlocks');if(!await persistExplicitDraft()){live.emptyText=before;return;}renderAchievementManager();renderPreview();}
@@ -50316,7 +50336,7 @@ function compactPlayerCss(published=false){
   let ui110EntityRulesDraftMode=false;
   function ui110OpenEntityDraftRules(){
     if(!entityDraft)return;syncEntityDraftFields();ui110EntityRulesDraftMode=true;entityRuleTemplateMode=false;entityRuleEntityId=entityDraft.id;
-    entityRuleDraft=storageClone(normalizeEntityRules(entityDraft.rules,entityDraft.fields));$('#entityRuleHeading').textContent=(entityDraft.name||uiText('entity'))+' · '+uiText110('字段规则','Field rules');$('#entityRuleHelp').textContent=uiText110('字段从不满足变为满足时触发；再次失效后可重新触发。','Runs when field conditions become true. It can run again after they become false.');renderEntityRuleManager();$('#entityRuleLayer').classList.remove('hidden');raiseEditorLayer($('#entityRuleLayer'));
+    entityRuleDraft=storageClone(normalizeEntityRules(entityDraft.rules,entityDraft.fields));$('#entityRuleHeading').textContent=(entityDraft.name||uiText('entity'))+' · '+uiText110('字段规则','Field rules');$('#entityRuleHelp').textContent=uiText110('这里检查的是这个实体自己的字段值。字段从不满足变为满足时触发。若要根据全局故事变量触发，请用「状态响应」。','These rules check this entity’s own field values and run when a condition becomes true. To react to a global story variable, use Reactions.');renderEntityRuleManager();$('#entityRuleLayer').classList.remove('hidden');raiseEditorLayer($('#entityRuleLayer'));
   }
   function ui110WithDraftEntity(run){
     if(!ui110EntityRulesDraftMode||!entityDraft)return run();const p=currentProject(),before=p.entities;p.entities=[...before.filter(e=>e.id!==entityDraft.id),entityDraft];
