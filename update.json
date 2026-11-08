@@ -1,8 +1,8 @@
 {
-  "versionCode": 14,
-  "versionName": "1.1.5",
+  "versionCode": 15,
+  "versionName": "1.1.6",
   "notes": {
-    "zh-CN": "重进时默认打开最后打开的故事，修复了个别 UI 显示问题。",
-    "en": "Reopening the app now defaults to the last opened story, and a few UI display issues have been fixed."
+    "zh-CN": "修复新建实体的字段规则可能失效的问题。移动端的空状态文案弹窗改为靠上显示，关闭节点设置的子弹窗后会回到原来的编辑位置。",
+    "en": "Fixed an issue where field rules could stop working after a new entity was saved. On mobile, the empty-state message dialog now opens higher on the screen. Closing a dialog opened from the node editor now restores your scroll position."
   }
 }
