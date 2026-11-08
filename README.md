@@ -29,7 +29,7 @@ Verseforge Story 是一个面向个人创作者的本地文游编辑器。通过
 
 单文件编辑器内嵌标签页图标、Apple 主屏幕图标和“关于”中的产品标志。网页版使用外部文件提供搜索引擎图标、PWA 安装图标和分享图片。
 
-部署时将网页版文件命名为 `index.html`，与 `site.webmanifest`、`sw.js`、`CNAME` 同级，并保留 `assets/icons/` 目录。编辑器默认使用简体中文，首次打开时可选择语言，也可在设置中切换。网页标题、搜索简介和社媒分享信息使用英文。
+编辑器默认使用简体中文，首次打开时可选择语言，也可在设置中切换。网页标题、搜索简介和社媒分享信息使用英文。
 
 ### Android 应用
 
@@ -86,7 +86,7 @@ The editor runs from a single HTML file, with no dependency installation, accoun
 
 The single-file editor includes embedded browser tab icons, an Apple home-screen icon, and the logo shown in About. The website uses external files for its search favicon, PWA installation icons, and social sharing images.
 
-For deployment, name the web editor `index.html` and keep `site.webmanifest`, `sw.js`, and `CNAME` beside it, along with the `assets/icons/` directory. The editor defaults to Simplified Chinese. Choose a language on first launch or switch it in Settings. Page titles, search descriptions, and social sharing metadata use English.
+The editor defaults to Simplified Chinese. Choose a language on first launch or switch it in Settings. Page titles, search descriptions, and social sharing metadata use English.
 
 ### Android app
 
