@@ -1124,6 +1124,11 @@ input.placeholder-scroll-covered::placeholder{color:transparent!important;opacit
 .modal-layer .modal-scroll .ui-logic-row.variable-condition>.logic-select-for-operator,.modal-layer .modal-scroll .ui-logic-row.variable-effect>.logic-select-for-action{grid-column:1!important;grid-row:3!important}
 .modal-layer .modal-scroll .ui-logic-row.entity-condition>.logic-select-for-entity-field,.modal-layer .modal-scroll .ui-logic-row.entity-effect>.logic-select-for-entity-field{grid-column:1/-1!important;grid-row:3!important}
 .modal-layer .modal-scroll .ui-logic-row.entity-condition>.logic-select-for-operator,.modal-layer .modal-scroll .ui-logic-row.entity-effect>.logic-select-for-action{grid-column:1!important;grid-row:4!important}
+.modal-layer .modal-scroll .ui-logic-row.effect-without-value>select[data-action],
+.modal-layer .modal-scroll .ui-logic-row.effect-without-value>.logic-select-for-action{grid-column:1/-1!important}
+.modal-layer .modal-scroll select[data-invalid-reference],
+.modal-layer .modal-scroll .logic-select-shell:has(>select[data-invalid-reference])>.logic-select-button,
+.modal-layer .modal-scroll .node-picker:has(>select[data-invalid-reference]) .node-picker-input{border-color:var(--danger);color:var(--danger)}
 .preview-status-row,.preview-status-entity-field{display:flex;gap:8px;align-items:center;min-width:0;max-width:100%}
 .preview-status-row>strong,.preview-status-entity-field>strong{flex:0 0 auto;min-width:0;max-width:calc(100% - 30px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .preview-status-row>.preview-status-value,.preview-status-entity-field>.preview-status-value{flex:1 1 auto;min-width:0;max-width:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;font-weight:500}
@@ -1334,7 +1339,7 @@ html[lang^="zh"] #nodeTitleAlignmentLabel{margin-inline-end:-.4em}
 
   <div class="modal-layer high hidden" id="variableLayer"><section class="modal small" role="dialog" aria-modal="true" aria-label="故事变量"><div class="modal-head"><h2>故事变量</h2><span class="spacer"></span><button class="icon-btn" id="closeVariableBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><p class="hint" id="variableManagerHint" style="margin-top:0">故事变量是持续存在的状态。正文使用 <span class="variable-code">${变量名}</span> 调用。变量名以英文字母开头，可包含英文、数字和下划线。点击变量卡片可查看使用位置。</p><div class="manager-organize-bar"><input class="manager-search" id="variableSearchInput" type="search" placeholder="搜索名称、变量名或分组" aria-label="搜索故事变量"><span class="spacer"></span><button class="chip-btn" id="variableGroupBtn" type="button">＋ 新建分组</button><button class="chip-btn" id="variableOrderBtn" type="button">分组调序</button></div><div class="variable-list" id="variableList"></div></div><div class="modal-actions"><button class="text-btn" id="variableCollectModeBtn" type="button">收录</button><button class="text-btn" id="backVariableBtn" type="button" data-editor-action="back">返回</button><button class="primary-btn" id="addVariableBtn" type="button">＋ 添加变量</button></div></section></div>
 
-  <div class="modal-layer high hidden" id="variableEditorLayer"><section class="modal small" role="dialog" aria-modal="true" aria-label="编辑故事变量"><div class="modal-head"><h2 id="variableEditorTitle">添加故事变量</h2><span class="spacer"></span><button class="icon-btn" id="closeVariableEditorBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><div class="field"><label for="variableName">变量名</label><input id="variableName" maxlength="40" spellcheck="false" autocapitalize="off" placeholder="例如：money"><p class="hint">正文中写成 <span class="variable-code" id="variableSyntaxPreview">${money}</span>。</p></div><div class="field"><label>显示名称 <span class="hint">可选</span></label><input id="variableLabel" maxlength="50" placeholder="例如：金币"><p class="hint">作为玩家界面和调试中的显示名称；留空时使用变量名。</p></div><div class="field"><label for="variableValueType">值类型</label><select id="variableValueType"><option value="text">文本</option><option value="number">数字</option></select></div><div class="field"><label for="variableInitialSource">初始值</label><select id="variableInitialSource"><option value="fixed">指定值</option><option value="pool">随机候选</option><option value="range">随机数字</option></select><p class="hint"></p></div><div class="field" id="variableFixedField"><label for="variableInitialValue">初始值</label><input id="variableInitialValue" maxlength="160" placeholder="可填写初始值"><p class="hint" id="variableInitialValueHint"></p><p class="field-error hidden" id="variableInitialValueError"></p></div><div class="field hidden" id="variablePoolField"><label>候选值</label><p class="hint" style="margin-top:0">每次开局抽一个。权重留空按 1。</p><div class="variable-pool-list" id="variablePoolList"></div><button class="chip-btn" id="addVariablePoolItemBtn" type="button" style="margin-top:9px">＋ 添加候选值</button></div><div class="field hidden" id="variableRangeField"><label>范围</label><p class="hint" style="margin-top:0">每次开局在范围内抽一个；两端都是整数时只抽整数。</p><div class="countdown-grid two"><label>最小值<input id="variableRangeMin" type="text" inputmode="decimal" value="0"></label><label>最大值<input id="variableRangeMax" type="text" inputmode="decimal" value="10"></label></div></div><div class="field"><label for="variableMutable">取值规则</label><select id="variableMutable"><option value="fixed">不允许</option><option value="mutable">允许</option></select><p class="hint">决定节点变化、状态响应等是否可以在故事运行中写入这个变量；与“初始值”是两个独立概念。</p></div><div class="field"><label for="variableVisible">玩家可见性</label><select id="variableVisible"><option value="hidden">隐藏</option><option value="visible">可见</option></select><p class="hint">开局时是否允许玩家知道，之后可用状态变化切换。</p></div><div class="field"><label>变量变化系统提示</label><div class="system-notice-summary"><div><strong id="variableChangeNoticeTitle">未设置</strong><small id="variableChangeNoticeSummary">数值变化时弹出提示</small></div><button class="chip-btn" id="variableChangeNoticeBtn" type="button">设置</button></div></div><div class="field"><label>备注 <span class="hint">可选</span></label><textarea id="variableNote" maxlength="500" placeholder="这个变量用来做什么" style="min-height:90px"></textarea></div></div><div class="modal-actions"><button class="text-btn" id="cancelVariableEditorBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="saveVariableEditorBtn" data-editor-mutates="true" data-editor-commit="true">保存变量</button></div></section></div>
+  <div class="modal-layer high hidden" id="variableEditorLayer"><section class="modal small" role="dialog" aria-modal="true" aria-label="编辑故事变量"><div class="modal-head"><h2 id="variableEditorTitle">新建故事变量</h2><span class="spacer"></span><button class="icon-btn" id="closeVariableEditorBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><div class="field"><label for="variableName">变量名</label><input id="variableName" maxlength="40" spellcheck="false" autocapitalize="off" placeholder="例如：money"><p class="hint">正文中写成 <span class="variable-code" id="variableSyntaxPreview">${money}</span>。</p></div><div class="field"><label>显示名称 <span class="hint">可选</span></label><input id="variableLabel" maxlength="50" placeholder="例如：金币"><p class="hint">作为玩家界面和调试中的显示名称；留空时使用变量名。</p></div><div class="field"><label for="variableValueType">值类型</label><select id="variableValueType"><option value="text">文本</option><option value="number">数字</option></select></div><div class="field"><label for="variableInitialSource">初始值</label><select id="variableInitialSource"><option value="fixed">指定值</option><option value="pool">随机候选</option><option value="range">随机数字</option></select><p class="hint"></p></div><div class="field" id="variableFixedField"><label for="variableInitialValue">初始值</label><input id="variableInitialValue" maxlength="160" placeholder="可填写初始值"><p class="hint" id="variableInitialValueHint"></p><p class="field-error hidden" id="variableInitialValueError"></p></div><div class="field hidden" id="variablePoolField"><label>候选值</label><p class="hint" style="margin-top:0">每次开局抽一个。权重留空按 1。</p><div class="variable-pool-list" id="variablePoolList"></div><button class="chip-btn" id="addVariablePoolItemBtn" type="button" style="margin-top:9px">＋ 添加候选值</button></div><div class="field hidden" id="variableRangeField"><label>范围</label><p class="hint" style="margin-top:0">每次开局在范围内抽一个；两端都是整数时只抽整数。</p><div class="countdown-grid two"><label>最小值<input id="variableRangeMin" type="text" inputmode="decimal" value="0"></label><label>最大值<input id="variableRangeMax" type="text" inputmode="decimal" value="10"></label></div></div><div class="field"><label for="variableMutable">取值规则</label><select id="variableMutable"><option value="fixed">不允许</option><option value="mutable">允许</option></select><p class="hint">决定节点变化、状态响应等是否可以在故事运行中写入这个变量；与“初始值”是两个独立概念。</p></div><div class="field"><label for="variableVisible">玩家可见性</label><select id="variableVisible"><option value="hidden">隐藏</option><option value="visible">可见</option></select><p class="hint">开局时是否允许玩家知道，之后可用状态变化切换。</p></div><div class="field"><label>变量变化系统提示</label><div class="system-notice-summary"><div><strong id="variableChangeNoticeTitle">未设置</strong><small id="variableChangeNoticeSummary">数值变化时弹出提示</small></div><button class="chip-btn" id="variableChangeNoticeBtn" type="button">设置</button></div></div><div class="field"><label>备注 <span class="hint">可选</span></label><textarea id="variableNote" maxlength="500" placeholder="这个变量用来做什么" style="min-height:90px"></textarea></div></div><div class="modal-actions"><button class="text-btn" id="cancelVariableEditorBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="saveVariableEditorBtn" data-editor-mutates="true" data-editor-commit="true">保存变量</button></div></section></div>
 
   <div class="modal-layer high hidden" id="nodeLocalVariableLayer"><section class="modal small" role="dialog" aria-modal="true" aria-label="节点变量"><div class="modal-head"><h2>节点变量</h2><span class="spacer"></span><button class="icon-btn" id="closeNodeLocalVariableBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><p class="hint" style="margin-top:0">只在本节点有效：每次进入按权重抽一次，存档会保存抽到的值。</p><div class="local-variable-list" id="nodeLocalVariableList"></div></div><div class="modal-actions"><button class="text-btn" id="dismissNodeLocalVariableBtn" type="button" data-editor-action="back">返回</button><button class="primary-btn" id="addNodeLocalVariableBtn" type="button">＋ 添加变量</button></div></section></div>
 
@@ -1342,13 +1347,13 @@ html[lang^="zh"] #nodeTitleAlignmentLabel{margin-inline-end:-.4em}
 
   <div class="modal-layer high hidden" id="achievementLayer"><section class="modal wide" role="dialog" aria-modal="true" aria-label="故事成就"><div class="modal-head"><h2>故事成就</h2><span class="spacer"></span><button class="icon-btn" id="closeAchievementBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><p class="hint" style="margin-top:0">跨周目保存的收集记录，重新开始或读档都会保留。</p><div class="logic-section"><h3>未解锁成就展示</h3><p class="hint">每个类别可单独设置。 <button class="achievement-example-link" id="achievementDisplayExamplesBtn" type="button">查看示例</button></p></div><div class="achievement-manager-toolbar"><strong>成就类别</strong><span class="spacer"></span><button class="chip-btn" id="achievementEmptyModeBtn" type="button">空状态</button><button class="chip-btn" id="achievementCategoryOrderBtn" type="button">类别调序</button></div><div class="achievement-editor-list" id="achievementList"></div><button class="chip-btn" id="addAchievementCategoryBtn" type="button" style="width:100%;margin-top:12px">＋ 添加类别</button></div><div class="modal-actions"><button class="text-btn" id="backAchievementBtn" type="button" data-editor-action="back">返回</button><button class="primary-btn" id="addAchievementBtn" type="button">＋ 添加成就</button></div></section></div>
 
-  <div class="modal-layer high hidden" id="achievementEditorLayer"><section class="modal wide" role="dialog" aria-modal="true" aria-label="编辑故事成就"><div class="modal-head"><h2 id="achievementEditorTitle">添加故事成就</h2><span class="spacer"></span><button class="icon-btn" id="closeAchievementEditorBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><div class="field"><label for="achievementType">成就类别</label><select id="achievementType"></select></div><div class="field"><label for="achievementName">名称</label><input id="achievementName" maxlength="80" placeholder="例如：传说中的钥匙"></div><div class="field"><label for="achievementDescription">说明</label><textarea id="achievementDescription" maxlength="500" placeholder="介绍这项收集记录或给玩家留下探索线索" style="min-height:100px"></textarea></div><div class="logic-section"><h3>达成条件</h3><p class="hint">可用：拥有记忆、变量比较、到达节点。</p><div class="achievement-condition-list" id="achievementConditionList"></div><button class="chip-btn logic-add" id="addAchievementConditionBtn" type="button">＋ 添加条件</button><div class="round-options logic-mode" id="achievementConditionMode"><label><input type="radio" name="achievementConditionMode" value="all" checked><span></span>全部满足</label><label><input type="radio" name="achievementConditionMode" value="any"><span></span>满足任一</label></div></div></div><div class="modal-actions"><button class="text-btn" id="cancelAchievementEditorBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="saveAchievementEditorBtn" data-editor-mutates="true" data-editor-commit="true">保存成就</button></div></section></div>
+  <div class="modal-layer high hidden" id="achievementEditorLayer"><section class="modal wide" role="dialog" aria-modal="true" aria-label="编辑故事成就"><div class="modal-head"><h2 id="achievementEditorTitle">新建故事成就</h2><span class="spacer"></span><button class="icon-btn" id="closeAchievementEditorBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><div class="field"><label for="achievementType">成就类别</label><select id="achievementType"></select></div><div class="field"><label for="achievementName">名称</label><input id="achievementName" maxlength="80" placeholder="例如：传说中的钥匙"></div><div class="field"><label for="achievementDescription">说明</label><textarea id="achievementDescription" maxlength="500" placeholder="介绍这项收集记录或给玩家留下探索线索" style="min-height:100px"></textarea></div><div class="logic-section"><h3>达成条件</h3><p class="hint">可用：拥有记忆、变量比较、到达节点。</p><div class="achievement-condition-list" id="achievementConditionList"></div><button class="chip-btn logic-add" id="addAchievementConditionBtn" type="button">＋ 添加条件</button><div class="round-options logic-mode" id="achievementConditionMode"><label><input type="radio" name="achievementConditionMode" value="all" checked><span></span>全部满足</label><label><input type="radio" name="achievementConditionMode" value="any"><span></span>满足任一</label></div></div></div><div class="modal-actions"><button class="text-btn" id="cancelAchievementEditorBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="saveAchievementEditorBtn" data-editor-mutates="true" data-editor-commit="true">保存成就</button></div></section></div>
 
   <div class="modal-layer high hidden" id="entityLayer"><section class="modal small" role="dialog" aria-modal="true" aria-label="故事实体"><div class="modal-head"><h2>故事实体</h2><span class="spacer"></span><button class="icon-btn" id="closeEntityBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><p class="hint" id="entityManagerHint" style="margin-top:0">角色、物品、地点等独立对象。实体一开始就存在；模板用来在故事中生成新实例。</p><div class="manager-organize-bar"><input class="manager-search" id="entitySearchInput" type="search" placeholder="搜索实体、ID 或分组" aria-label="搜索故事实体"></div><div class="entity-section-head"><h3>故事实体</h3><div class="author-group-actions"><button class="chip-btn" id="entityGroupBtn" type="button">＋ 新建分组</button><button class="chip-btn" id="entityOrderBtn" type="button">分组调序</button><button class="chip-btn" id="addEntityBtn" type="button">＋ 添加实体</button></div></div><div class="entity-list" id="entityList"></div><div class="entity-template-section"><div class="manager-organize-bar"><input class="manager-search" id="templateSearchInput" type="search" placeholder="搜索模板、ID 或分组" aria-label="搜索实体模板"></div><div class="entity-section-head"><h3>实体模板</h3><div class="author-group-actions"><button class="chip-btn" id="templateGroupBtn" type="button">＋ 新建分组</button><button class="chip-btn" id="templateOrderBtn" type="button">分组调序</button><button class="chip-btn" id="addEntityTemplateBtn" type="button">＋ 添加模板</button></div></div><div class="entity-list" id="entityTemplateList"></div></div></div><div class="modal-actions"><button class="text-btn" id="entityCollectModeBtn" type="button">收录</button><button class="text-btn" id="backEntityBtn" type="button" data-editor-action="back">返回</button></div></section></div>
 
-  <div class="modal-layer high hidden" id="entityEditorLayer"><section class="modal wide" role="dialog" aria-modal="true" aria-label="编辑故事实体"><div class="modal-head"><h2 id="entityEditorTitle">添加故事实体</h2><span class="spacer"></span><button class="icon-btn" id="closeEntityEditorBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><div class="field"><label for="entityName">实体名称</label><input id="entityName" maxlength="80" placeholder="例如：王铁柱、黑龙、王宫大门"><p class="hint">编辑器里用的名称，玩家看不到。</p></div><div class="field"><label>显示名称 <span class="hint">可选</span></label><input id="entityPlayerName" maxlength="120" placeholder="留空时默认使用实体名称"><p class="hint">只影响玩家侧显示。正文可用 <span class="variable-code" id="entityPlayerNameToken">${wang.displayName}</span> 引用；运行中还可以通过状态变化改名。</p></div><div class="field"><label for="entityPlayerNameVisible">玩家名称初始状态</label><select id="entityPlayerNameVisible"><option value="visible">显示名称</option><option value="hidden">隐藏为 ???</option></select><p class="hint">选“隐藏为 ???”时只遮住名称，实体照常出现。</p></div><div class="field"><label for="entityKey">实体 ID</label><input id="entityKey" maxlength="40" spellcheck="false" autocapitalize="off" placeholder="例如：wang、black_dragon"><p class="hint">正文引用用的 ID：英文字母开头，可含数字和下划线。</p></div><div class="field"><label for="entityVisible">玩家可见性</label><select id="entityVisible"><option value="hidden">隐藏</option><option value="visible">可见</option></select><p class="hint">开局时是否允许玩家知道，之后可用状态变化切换。</p></div><div class="field"><label>实体字段</label><p class="hint" style="margin-top:0">每个字段对应一个故事变量，每个实体单独存值。</p><div class="entity-field-list" id="entityFieldList"></div><button class="chip-btn" id="addEntityFieldBtn" type="button" style="margin-top:9px">＋ 添加字段</button></div></div><div class="modal-actions"><button class="text-btn" id="cancelEntityEditorBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="saveEntityEditorBtn" data-editor-mutates="true" data-editor-commit="true">保存实体</button></div></section></div><div class="modal-layer high hidden" id="entityTemplateEditorLayer"><section class="modal wide" role="dialog" aria-modal="true" aria-label="编辑实体模板"><div class="modal-head"><h2 id="entityTemplateEditorTitle">添加实体模板</h2><span class="spacer"></span><button class="icon-btn" id="closeEntityTemplateEditorBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><div class="field"><label for="entityTemplateName">模板名称</label><input id="entityTemplateName" maxlength="80" placeholder="例如：强盗手下、随机旅人"><p class="hint">用来生成实例，本身不会出现在故事里。</p></div><div class="field"><label for="entityTemplateKey">模板 ID</label><input id="entityTemplateKey" maxlength="40" spellcheck="false" autocapitalize="off" placeholder="例如：bandit、traveler"><p class="hint">以英文字母开头，可包含英文、数字和下划线，全故事唯一。</p></div><div class="field"><label for="entityTemplateNameFormat">实例名称</label><input id="entityTemplateNameFormat" maxlength="120" placeholder="例如：${surname}${given_name}"><p class="hint">可用模板字段，留空为“模板名称 + 编号”。</p></div><div class="field"><label>显示名称 <span class="hint">可选</span></label><input id="entityTemplatePlayerNameFormat" maxlength="120" placeholder="例如：神秘人、${surname}${given_name}"><p class="hint">可用模板字段，留空时同实例名称。</p></div><div class="field"><label for="entityTemplatePlayerNameVisible">玩家名称初始状态</label><select id="entityTemplatePlayerNameVisible"><option value="visible">显示名称</option><option value="hidden">隐藏为 ???</option></select><p class="hint">选“隐藏为 ???”时只遮住名称，实例照常出现。</p></div><div class="field"><label for="entityTemplateVisible">玩家可见性</label><select id="entityTemplateVisible"><option value="hidden">隐藏</option><option value="visible">可见</option></select><p class="hint">新实例生成时是否允许玩家知道，之后可用状态变化切换。</p></div><div class="field"><label>模板字段</label><p class="hint" style="margin-top:0">字段可以选择已有故事变量，也可以在这里直接新建。指定值会直接写入；随机候选按权重抽取；范围在每个实例生成时独立抽取。</p><div class="entity-template-field-list" id="entityTemplateFieldList"></div><button class="chip-btn" id="addEntityTemplateFieldBtn" type="button" style="margin-top:9px">＋ 添加字段</button></div><div class="field"><label>字段规则</label><div class="memory-setting-row"><p id="entityTemplateRuleSummary">生成实例可独立响应字段变化。</p><button class="chip-btn" id="entityTemplateRulesBtn" type="button">设置规则</button></div><p class="hint">（挪进规则子弹窗顶部：“每个实例单独触发。“当前实例”指触发规则的那一个。”）</p></div></div><div class="modal-actions"><button class="text-btn" id="cancelEntityTemplateEditorBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="saveEntityTemplateEditorBtn" data-editor-mutates="true" data-editor-commit="true">保存模板</button></div></section></div>
+  <div class="modal-layer high hidden" id="entityEditorLayer"><section class="modal wide" role="dialog" aria-modal="true" aria-label="编辑故事实体"><div class="modal-head"><h2 id="entityEditorTitle">新建故事实体</h2><span class="spacer"></span><button class="icon-btn" id="closeEntityEditorBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><div class="field"><label for="entityName">实体名称</label><input id="entityName" maxlength="80" placeholder="例如：王铁柱、黑龙、王宫大门"><p class="hint">编辑器里用的名称，玩家看不到。</p></div><div class="field"><label>显示名称 <span class="hint">可选</span></label><input id="entityPlayerName" maxlength="120" placeholder="留空时默认使用实体名称"><p class="hint">只影响玩家侧显示。正文可用 <span class="variable-code" id="entityPlayerNameToken">${wang.displayName}</span> 引用；运行中还可以通过状态变化改名。</p></div><div class="field"><label for="entityPlayerNameVisible">玩家名称初始状态</label><select id="entityPlayerNameVisible"><option value="visible">显示名称</option><option value="hidden">隐藏为 ???</option></select><p class="hint">选“隐藏为 ???”时只遮住名称，实体照常出现。</p></div><div class="field"><label for="entityKey">实体 ID</label><input id="entityKey" maxlength="40" spellcheck="false" autocapitalize="off" placeholder="例如：wang、black_dragon"><p class="hint">正文引用用的 ID：英文字母开头，可含数字和下划线。</p></div><div class="field"><label for="entityVisible">玩家可见性</label><select id="entityVisible"><option value="hidden">隐藏</option><option value="visible">可见</option></select><p class="hint">开局时是否允许玩家知道，之后可用状态变化切换。</p></div><div class="field"><label>实体字段</label><p class="hint" style="margin-top:0">每个字段对应一个故事变量，每个实体单独存值。</p><div class="entity-field-list" id="entityFieldList"></div><button class="chip-btn" id="addEntityFieldBtn" type="button" style="margin-top:9px">＋ 添加字段</button></div></div><div class="modal-actions"><button class="text-btn" id="cancelEntityEditorBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="saveEntityEditorBtn" data-editor-mutates="true" data-editor-commit="true">保存实体</button></div></section></div><div class="modal-layer high hidden" id="entityTemplateEditorLayer"><section class="modal wide" role="dialog" aria-modal="true" aria-label="编辑实体模板"><div class="modal-head"><h2 id="entityTemplateEditorTitle">新建实体模板</h2><span class="spacer"></span><button class="icon-btn" id="closeEntityTemplateEditorBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><div class="field"><label for="entityTemplateName">模板名称</label><input id="entityTemplateName" maxlength="80" placeholder="例如：强盗手下、随机旅人"><p class="hint">用来生成实例，本身不会出现在故事里。</p></div><div class="field"><label for="entityTemplateKey">模板 ID</label><input id="entityTemplateKey" maxlength="40" spellcheck="false" autocapitalize="off" placeholder="例如：bandit、traveler"><p class="hint">以英文字母开头，可包含英文、数字和下划线，全故事唯一。</p></div><div class="field"><label for="entityTemplateNameFormat">实例名称</label><input id="entityTemplateNameFormat" maxlength="120" placeholder="例如：${surname}${given_name}"><p class="hint">可用模板字段，留空为“模板名称 + 编号”。</p></div><div class="field"><label>显示名称 <span class="hint">可选</span></label><input id="entityTemplatePlayerNameFormat" maxlength="120" placeholder="例如：神秘人、${surname}${given_name}"><p class="hint">可用模板字段，留空时同实例名称。</p></div><div class="field"><label for="entityTemplatePlayerNameVisible">玩家名称初始状态</label><select id="entityTemplatePlayerNameVisible"><option value="visible">显示名称</option><option value="hidden">隐藏为 ???</option></select><p class="hint">选“隐藏为 ???”时只遮住名称，实例照常出现。</p></div><div class="field"><label for="entityTemplateVisible">玩家可见性</label><select id="entityTemplateVisible"><option value="hidden">隐藏</option><option value="visible">可见</option></select><p class="hint">新实例生成时是否允许玩家知道，之后可用状态变化切换。</p></div><div class="field"><label>模板字段</label><p class="hint" style="margin-top:0">字段可以选择已有故事变量，也可以在这里直接新建。指定值会直接写入；随机候选按权重抽取；范围在每个实例生成时独立抽取。</p><div class="entity-template-field-list" id="entityTemplateFieldList"></div><button class="chip-btn" id="addEntityTemplateFieldBtn" type="button" style="margin-top:9px">＋ 添加字段</button></div><div class="field"><label>字段规则</label><div class="memory-setting-row"><p id="entityTemplateRuleSummary">生成实例可独立响应字段变化。</p><button class="chip-btn" id="entityTemplateRulesBtn" type="button">设置规则</button></div><p class="hint">（挪进规则子弹窗顶部：“每个实例单独触发。“当前实例”指触发规则的那一个。”）</p></div></div><div class="modal-actions"><button class="text-btn" id="cancelEntityTemplateEditorBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="saveEntityTemplateEditorBtn" data-editor-mutates="true" data-editor-commit="true">保存模板</button></div></section></div>
 
-  <div class="modal-layer high hidden" id="entityTemplatePresetImportLayer"><section class="modal small" role="dialog" aria-modal="true" aria-label="导入变量预设"><div class="modal-head"><h2>导入变量预设</h2><span class="spacer"></span><button class="icon-btn" id="closeEntityTemplatePresetImportBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><p class="hint" id="entityTemplatePresetImportHint" style="margin-top:0"></p><div class="field hidden" id="entityTemplatePresetFixedField"><label for="entityTemplatePresetFixedValue">指定值</label><input id="entityTemplatePresetFixedValue" maxlength="160"></div><div class="field hidden" id="entityTemplatePresetPoolField"><label>候选值</label><p class="hint" style="margin-top:0">每行“值 | 权重”，导入前可直接改。</p><textarea id="entityTemplatePresetPoolText" style="min-height:220px"></textarea></div><div class="field hidden" id="entityTemplatePresetRangeField"><label>范围</label><div class="countdown-grid two"><label>最小值<input id="entityTemplatePresetRangeMin" type="text" inputmode="decimal"></label><label>最大值<input id="entityTemplatePresetRangeMax" type="text" inputmode="decimal"></label></div></div></div><div class="modal-actions"><button class="text-btn" id="cancelEntityTemplatePresetImportBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="applyEntityTemplatePresetImportBtn" data-editor-mutates="true" data-editor-commit="true">导入</button></div></section></div><div class="modal-layer high hidden" id="entityRuleLayer"><section class="modal wide" role="dialog" aria-modal="true" aria-label="实体规则"><div class="modal-head"><h2 id="entityRuleHeading">实体规则</h2><span class="spacer"></span><button class="icon-btn" id="closeEntityRuleBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><p class="hint" id="entityRuleHelp" style="margin-top:0">字段从不满足变为满足时执行一次。</p><div class="entity-rule-list" id="entityRuleList"></div><button class="chip-btn" id="addEntityRuleBtn" type="button" style="width:100%;margin-top:12px">＋ 添加规则</button></div><div class="modal-actions"><button class="text-btn" id="cancelEntityRuleBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="saveEntityRuleBtn" data-editor-mutates="true" data-editor-commit="true">保存</button></div></section></div>
+  <div class="modal-layer high hidden" id="entityTemplatePresetImportLayer"><section class="modal small" role="dialog" aria-modal="true" aria-label="导入变量预设"><div class="modal-head"><h2>导入变量预设</h2><span class="spacer"></span><button class="icon-btn" id="closeEntityTemplatePresetImportBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><p class="hint" id="entityTemplatePresetImportHint" style="margin-top:0"></p><div class="field hidden" id="entityTemplatePresetFixedField"><label for="entityTemplatePresetFixedValue">指定值</label><input id="entityTemplatePresetFixedValue" maxlength="160"></div><div class="field hidden" id="entityTemplatePresetPoolField"><label>候选值</label><p class="hint" style="margin-top:0">每行“值 | 权重”，导入前可直接改。</p><textarea id="entityTemplatePresetPoolText" style="min-height:220px"></textarea></div><div class="field hidden" id="entityTemplatePresetRangeField"><label>范围</label><div class="countdown-grid two"><label>最小值<input id="entityTemplatePresetRangeMin" type="text" inputmode="decimal"></label><label>最大值<input id="entityTemplatePresetRangeMax" type="text" inputmode="decimal"></label></div></div></div><div class="modal-actions"><button class="text-btn" id="cancelEntityTemplatePresetImportBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="applyEntityTemplatePresetImportBtn" data-editor-mutates="true" data-editor-commit="true">导入</button></div></section></div><div class="modal-layer high hidden" id="entityRuleLayer"><section class="modal wide" role="dialog" aria-modal="true" aria-label="字段规则"><div class="modal-head"><h2 id="entityRuleHeading">字段规则</h2><span class="spacer"></span><button class="icon-btn" id="closeEntityRuleBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><p class="hint" id="entityRuleHelp" style="margin-top:0">字段从不满足变为满足时执行一次。</p><div class="entity-rule-list" id="entityRuleList"></div><button class="chip-btn" id="addEntityRuleBtn" type="button" style="width:100%;margin-top:12px">＋ 添加规则</button></div><div class="modal-actions"><button class="text-btn" id="cancelEntityRuleBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="saveEntityRuleBtn" data-editor-mutates="true" data-editor-commit="true">保存</button></div></section></div>
 
   <div class="modal-layer high hidden" id="variableTokenLayer"><section class="modal small" role="dialog" aria-modal="true" aria-label="插入故事变量"><div class="modal-head"><h2>故事变量</h2><span class="spacer"></span><button class="icon-btn" id="closeVariableTokenBtn" aria-label="关闭"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="modal-scroll"><p class="hint" style="margin-top:0">选择已有故事变量，或直接新建一个。保存后会自动回到这里并选中新变量。</p><div class="field" style="margin:0"><label>故事变量</label><div class="dependency-picker"><select id="variableTokenSelect"></select><button class="dependency-create-btn" id="createVariableTokenBtn" type="button">＋ 新建</button></div></div><p class="variable-token-preview" id="variableTokenPreview"></p></div><div class="modal-actions"><button class="text-btn" id="cancelVariableTokenBtn" data-editor-action="cancel">取消</button><button class="primary-btn" id="insertVariableTokenConfirmBtn">插入</button></div></section></div>
 
@@ -1564,7 +1569,7 @@ html[lang^="zh"] #nodeTitleAlignmentLabel{margin-inline-end:-.4em}
 </script>
 <script>
 // Release baseline: preserve v1 data and introduce explicit migrations before changing a persisted schema.
-const VF_RELEASE=Object.freeze({appVersion:'1.1.6',storyVersion:1,materialVersion:1,editorSchema:1,statusPanelSchema:1,backupVersion:1,themeVersion:1,dbVersion:1,storageNamespace:'v1'});
+const VF_RELEASE=Object.freeze({appVersion:'1.1.7',storyVersion:1,materialVersion:1,editorSchema:1,statusPanelSchema:1,backupVersion:1,themeVersion:1,dbVersion:1,storageNamespace:'v1'});
 // Public metadata is English independently of the editor language.
 const VF_PUBLIC_METADATA=Object.freeze({"title":"Verseforge Story | Interactive Fiction Editor","description":"Create branching stories with a visual editor, variables, conditions, and live preview. Work offline and export standalone HTML games. Chinese and English UI."});
 const VF_STORAGE=Object.freeze({database:'vfstory_editor_'+VF_RELEASE.storageNamespace,language:'vfstory_editor_language_'+VF_RELEASE.storageNamespace});
@@ -6824,8 +6829,8 @@ const VF_MESSAGES=[
     "Edit story achievement"
   ],
   [
-    "\u6dfb\u52a0\u6545\u4e8b\u6210\u5c31",
-    "Add story achievement"
+    "\u65b0\u5efa\u6545\u4e8b\u6210\u5c31",
+    "New story achievement"
   ],
   [
     "<div class=\"logic-empty\">\u8fd8\u6ca1\u6709\u8fbe\u6210\u6761\u4ef6\u3002</div>",
@@ -6868,12 +6873,12 @@ const VF_MESSAGES=[
     "Local save failed. Your input is preserved; try again."
   ],
   [
-    "\u6210\u5c31\u5df2\u4fdd\u5b58",
-    "Achievement saved."
+    "\u5df2\u4fdd\u5b58\u6545\u4e8b\u6210\u5c31",
+    "Story achievement saved."
   ],
   [
-    "\u6210\u5c31\u5df2\u6dfb\u52a0",
-    "Achievement added."
+    "\u5df2\u4fdd\u5b58\u6545\u4e8b\u6210\u5c31",
+    "Story achievement saved."
   ],
   [
     "\u5220\u9664\u6545\u4e8b\u6210\u5c31",
@@ -6884,8 +6889,8 @@ const VF_MESSAGES=[
     "Delete achievement \"VFINTERPOLATION_0\"?"
   ],
   [
-    "\u6545\u4e8b\u6210\u5c31\u5df2\u5220\u9664",
-    "Achievement deleted."
+    "\u5df2\u5220\u9664\u6545\u4e8b\u6210\u5c31",
+    "Story achievement deleted."
   ],
   [
     "\u672a\u547d\u540d\u6210\u5c31",
@@ -7412,8 +7417,8 @@ const VF_MESSAGES=[
     "Edit entity"
   ],
   [
-    "\u6dfb\u52a0\u6545\u4e8b\u5b9e\u4f53",
-    "Add entity"
+    "\u65b0\u5efa\u6545\u4e8b\u5b9e\u4f53",
+    "New story entity"
   ],
   [
     "\u8fd9\u4e2a\u6545\u4e8b\u53d8\u91cf\u5df2\u7ecf\u662f\u5b9e\u4f53\u5b57\u6bb5",
@@ -7528,7 +7533,7 @@ const VF_MESSAGES=[
     "Entity deleted."
   ],
   [
-    " \u00b7 \u5b9e\u4f53\u89c4\u5219",
+    " \u00b7 \u5b57\u6bb5\u89c4\u5219",
     " \u00b7 Field rules"
   ],
   [
@@ -7628,7 +7633,7 @@ const VF_MESSAGES=[
     "Template field rules updated."
   ],
   [
-    "\u5b9e\u4f53\u89c4\u5219\u5df2\u4fdd\u5b58",
+    "\u5df2\u4fdd\u5b58\u5b57\u6bb5\u89c4\u5219",
     "Field rules saved."
   ],
   [
@@ -7636,8 +7641,8 @@ const VF_MESSAGES=[
     "Edit entity template"
   ],
   [
-    "\u6dfb\u52a0\u5b9e\u4f53\u6a21\u677f",
-    "Add entity template"
+    "\u65b0\u5efa\u5b9e\u4f53\u6a21\u677f",
+    "New entity template"
   ],
   [
     "\u6ca1\u6709\u53ef\u5bfc\u5165\u7684\u53d8\u91cf\u9884\u8bbe",
@@ -8320,8 +8325,8 @@ const VF_MESSAGES=[
     "Edit variable"
   ],
   [
-    "\u6dfb\u52a0\u6545\u4e8b\u53d8\u91cf",
-    "Add variable"
+    "\u65b0\u5efa\u6545\u4e8b\u53d8\u91cf",
+    "New story variable"
   ],
   [
     "<input data-pool-value maxlength=\"160\" placeholder=\"\u5019\u9009\u503c\" value=\"VFINTERPOLATION_0\"><input class=\"pool-weight\" data-pool-weight type=\"text\" inputmode=\"decimal\" maxlength=\"8\" placeholder=\"\u6743\u91cd\" value=\"VFINTERPOLATION_1\"><button class=\"logic-remove\" type=\"button\" aria-label=\"\u5220\u9664\u5019\u9009\u503c\">\u00d7</button>",
@@ -9433,7 +9438,7 @@ const VF_MESSAGES=[
   ],
   [
     "\u6545\u4e8b\u6210\u5c31",
-    "Achievements"
+    "Story achievements"
   ],
   [
     "VFINTERPOLATION_0 \u6210\u5c31 achievement",
@@ -14366,10 +14371,12 @@ const VF_STATIC={
   "搜索故事变量": "Search variables",
   "＋ 添加变量": "+ Add variable",
   "编辑故事变量": "Edit variable",
+  "新建故事变量": "New story variable",
   "添加故事变量": "Add variable",
   "变量名": "Variable name",
   "例如：money": "For example: money",
   "正文中写成": "Reference in text as",
+  "。": ".",
   "例如：金币": "For example: Coins",
   "作为玩家界面和调试中的显示名称；留空时使用变量名。": "Display name in player interfaces and debugging. Leave blank to use the variable name.",
   "值类型": "Value type",
@@ -14403,6 +14410,7 @@ const VF_STATIC={
   "成就类别": "Achievement categories",
   "＋ 添加成就": "+ Add achievement",
   "编辑故事成就": "Edit story achievement",
+  "新建故事成就": "New story achievement",
   "添加故事成就": "Add story achievement",
   "名称": "Name",
   "例如：传说中的钥匙": "For example: The Legendary Key",
@@ -14417,6 +14425,7 @@ const VF_STATIC={
   "搜索实体模板": "Search entity templates",
   "＋ 添加模板": "+ Add template",
   "编辑故事实体": "Edit entity",
+  "新建故事实体": "New story entity",
   "添加故事实体": "Add entity",
   "例如：王铁柱、黑龙、王宫大门": "For example: Rowan, Black Dragon, Palace Gate",
   "留空时默认使用实体名称": "Leave blank to use the entity name",
@@ -14430,6 +14439,7 @@ const VF_STATIC={
   "＋ 添加字段": "+ Add field",
   "保存实体": "Save entity",
   "编辑实体模板": "Edit entity template",
+  "新建实体模板": "New entity template",
   "添加实体模板": "Add entity template",
   "模板名称": "Template name",
   "例如：强盗手下、随机旅人": "For example: Bandit Minion, Random Traveler",
@@ -25836,7 +25846,7 @@ localizeStaticShell();
     activeNodePicker=null;
   }
   function nodePickerOptions(select) {
-    return [...select.options].filter(o => o.value).map(o => ({
+    return [...select.options].filter(o => o.value && !o.disabled).map(o => ({
       value: o.value,
       label: o.textContent.trim(),
       title: o.textContent.split(' · ')[0].trim()
@@ -27766,6 +27776,12 @@ localizeStaticShell();
     els.editorLayer.classList.add('hidden');
   }
   function numberedEditorName(base,index) {return String(base)+(VF_LANG==='en'?' ':'')+index;}
+  function uniqueNumberedEditorName(base, items, index = items.length + 1) {
+    const used = new Set(items.map(item => String(item.name || '').trim().toLowerCase()));
+    const stem = base.toLowerCase();
+    while (used.has(stem + ' ' + index) || used.has(numberedEditorName(stem, index))) index++;
+    return numberedEditorName(base, index);
+  }
   function uniqueTitle(base = _tr(727)) {
     const names=new Set(currentProject().nodes.map(x=>x.title)),separator=VF_LANG==='en'?' ':'';
     if(!names.has(base))return base;
@@ -32994,7 +33010,7 @@ localizeStaticShell();
     }
     const p = currentProject(),
       items = await readTestScenarios(p.id),
-      name = (await editorPromptDialog(_tr(1120), _tr(1121), _tr(1122,[items.length + 1]), uiText('save')))?.trim();
+      name = (await editorPromptDialog(_tr(1120), _tr(1121), uniqueNumberedEditorName(_tr(1122, ['']).trim(), items), uiText('save')))?.trim();
     if (!name) return;
     const item = {
       id: uid(),
@@ -33515,7 +33531,7 @@ localizeStaticShell();
       root = $('#chapterCountdownList');
     if (!c || !editingChapterCountdownDraft) return;
     root.innerHTML = '';
-    const timers = editingChapterCountdownDraft.timers || [];
+    const timers = editingChapterCountdownDraft.timers || [], notes = chapterTimerNotes(timers);
     if (!timers.length) {
       root.innerHTML = _tr(1177);
     }
@@ -33524,7 +33540,7 @@ localizeStaticShell();
       card.className = 'chapter-countdown-card';
       const min = Math.floor((timer.durationSec || 0) / 60),
         sec = (timer.durationSec || 0) % 60;
-      card.innerHTML = _tr(1179,[escapeHtml(timer.name || _tr(1178,[index + 1])),chapterNodeOptions(c.id, timer.startNodeId, p),chapterNodeOptions(c.id, timer.endNodeId, p),min,sec,timer.warningSec || 0,normalNodeOptions(timer.targetNodeId, p)]);
+      card.innerHTML = _tr(1179,[escapeHtml(notes[index]),chapterNodeOptions(c.id, timer.startNodeId, p),chapterNodeOptions(c.id, timer.endNodeId, p),min,sec,timer.warningSec || 0,normalNodeOptions(timer.targetNodeId, p)]);
       const start = $('[data-start]', card),
         end = $('[data-end]', card),
         minEl = $('[data-min]', card),
@@ -33548,7 +33564,7 @@ localizeStaticShell();
       sanitizeIntegerField(secEl, 59);
       sanitizeIntegerField(warning, 999999);
       $('[data-name]', card).onclick = async () => {
-        const name = (await promptDialog(_tr(1180), _tr(1181), timer.name || _tr(1178,[index + 1]), uiText('save')))?.trim();
+        const name = (await promptDialog(_tr(1180), _tr(1181), notes[index], uiText('save')))?.trim();
         if (name) {
           timer.name = name;
           renderChapterCountdownDraft();
@@ -33637,12 +33653,8 @@ localizeStaticShell();
       toast(_tr(1189));
       return;
     }
-    const usedNotes=editingChapterCountdownDraft.timers.filter(t=>t.name);
-    const timers = editingChapterCountdownDraft.timers.map((t, i) => {
-      const v = normalizeChapterTimer(t);
-      if (!v.name){v.name=nextChapterTimerNote(usedNotes,i+1);usedNotes.push(v);}
-      return v;
-    });
+    const notes = chapterTimerNotes(editingChapterCountdownDraft.timers);
+    const timers = editingChapterCountdownDraft.timers.map((t, i) => normalizeChapterTimer({...t, name: notes[i]}));
     if (!timers.length) {
       await alertDialog(_tr(1190), _tr(1191));
       return;
@@ -33651,7 +33663,7 @@ localizeStaticShell();
       pairs = new Set();
     for (let i = 0; i < timers.length; i++) {
       const t = timers[i],
-        no = t.name || _tr(1178,[i + 1]);
+        no = t.name;
       if (!t.startNodeId || !t.endNodeId) {
         await alertDialog(_tr(1192), _tr(1193,[no]));
         return;
@@ -34668,24 +34680,24 @@ localizeStaticShell();
     achievementItemSortCategoryId = null;
     renderStorySystems();
   }
-  function defaultAchievementCondition() {
-    const p = currentProject(),v=p.variables.find(v=>!isTimerVariable(v));
-    if (p.memories.length) return {
-      type: 'memory',
-      memoryId: p.memories[0].id,
-      state: 'on'
-    };
-    if (v) return {
-      type: 'variable',
-      variableId: v.id,
-      operator: 'gte',
-      compareValue: '0'
-    };
-    return {
-      type: 'visited',
-      nodeId: p.nodes.find(n => n.systemType !== 'home' && !n.eventCall?.enabled)?.id || '',
-      state: 'on'
-    };
+  function defaultAchievementCondition(type) {
+    const p = currentProject();
+    type = type || (p.memories.length ? 'memory' : p.variables.some(v => !isTimerVariable(v)) ? 'variable' : 'visited');
+    if (type === 'memory') return {type, memoryId: '', state: 'on'};
+    if (type === 'variable') return {type, variableId: '', operator: 'eq', compareValue: ''};
+    return {type: 'visited', nodeId: '', state: 'on'};
+  }
+  function achievementConditionsRepeat(conditions, p) {
+    const seen = new Set();
+    for (const condition of normalizeAchievementConditions(conditions)) {
+      if (condition.type === 'variable' && variableById(condition.variableId, p)?.valueType === 'number') {
+        condition.compareValue = String(Number(condition.compareValue));
+      }
+      const key = JSON.stringify(condition);
+      if (seen.has(key)) return true;
+      seen.add(key);
+    }
+    return false;
   }
   function openAchievementEditor(id = null) {
     const p = currentProject(),
@@ -34699,7 +34711,7 @@ localizeStaticShell();
       name: '',
       description: '',
       conditionMode: 'all',
-      conditions: [defaultAchievementCondition()],
+      conditions: [],
       createdAt: nowIso()
     };
     renderAchievementEditor();
@@ -34738,21 +34750,7 @@ localizeStaticShell();
       renderAchievementEditor();
     };
     type.onchange = e => {
-      const next = e.target.value;
-      if (next === 'memory') achievementDraft.conditions[index] = {
-        type: 'memory',
-        memoryId: p.memories[0]?.id || '',
-        state: 'on'
-      };else if (next === 'variable') achievementDraft.conditions[index] = {
-        type: 'variable',
-        variableId: p.variables.find(v=>!isTimerVariable(v))?.id || '',
-        operator: 'gte',
-        compareValue: '0'
-      };else achievementDraft.conditions[index] = {
-        type: 'visited',
-        nodeId: p.nodes.find(n => n.systemType !== 'home' && !n.eventCall?.enabled)?.id || '',
-        state: 'on'
-      };
+      achievementDraft.conditions[index] = defaultAchievementCondition(e.target.value);
       rerender();
     };
     if (c.type === 'memory') {
@@ -34760,6 +34758,7 @@ localizeStaticShell();
       const sel = document.createElement('select');
       sel.innerHTML = _tr(1306) + p.memories.map(m => `<option value="${m.id}">${escapeHtml(m.name)}</option>`).join('');
       sel.value = c.memoryId || '';
+      preserveInvalidSelection(sel, c.memoryId);
       sel.onchange = e => c.memoryId = e.target.value;
       main.append(sel, dependencyButton(_tr(1260), 'memory', $('#achievementEditorLayer'), m => {
         c.memoryId = m.id;
@@ -34771,6 +34770,7 @@ localizeStaticShell();
       const sel = document.createElement('select');
       sel.innerHTML = _tr(1307) + p.nodes.filter(n => n.systemType !== 'home' && !n.eventCall?.enabled).map(n => `<option value="${n.id}">${escapeHtml(n.title)}</option>`).join('');
       sel.value = c.nodeId || '';
+      preserveInvalidSelection(sel, c.nodeId);
       sel.dataset.nodePicker = '1';
       sel.onchange = e => c.nodeId = e.target.value;
       main.appendChild(sel);
@@ -34781,6 +34781,7 @@ localizeStaticShell();
       const sel = document.createElement('select');
       sel.innerHTML = _tr(1308) + timerMissingOption(c.variableId) + p.variables.map(v => `<option value="${v.id}">${escapeHtml(isTimerVariable(v)?timerText('singular')+' · '+timerReferenceName(v):v.label || v.name)}</option>`).join('');
       sel.value = c.variableId || '';
+      preserveInvalidSelection(sel, c.variableId);
       sel.onchange = e => {
         c.variableId = e.target.value;
         rerender();
@@ -34795,9 +34796,9 @@ localizeStaticShell();
       }));
       const op = document.createElement('select'),
         v = timerEditableVariable(c.variableId),
-        numeric = v?.valueType === 'number';
+        numeric = missingConditionType(v, c) === 'number';
       op.innerHTML = numeric ? '<option value="eq">=</option><option value="neq">≠</option><option value="gt">&gt;</option><option value="gte">≥</option><option value="lt">&lt;</option><option value="lte">≤</option>' : '<option value="eq">=</option><option value="neq">≠</option>';
-      if (![...op.options].some(o => o.value === c.operator)) c.operator = 'eq';
+      if (v && ![...op.options].some(o => o.value === c.operator)) c.operator = 'eq';
       op.value = c.operator;
       op.onchange = e => c.operator = e.target.value;
       const input = document.createElement('input');
@@ -34847,7 +34848,7 @@ localizeStaticShell();
     if (c.type === 'variable') {
       const v = p.variables.find(x => x.id === c.variableId);
       if (!v) return false;
-      if (v.valueType === 'number') return Number.isFinite(Number(c.compareValue));
+      if (v.valueType === 'number') return String(c.compareValue ?? '').trim() !== '' && Number.isFinite(Number(c.compareValue));
       return String(c.compareValue ?? '').length > 0;
     }
     return false;
@@ -34865,6 +34866,9 @@ localizeStaticShell();
     if (!cats.some(c => c.id === achievementDraft.type)) return alertDialog(_tr(1316),_tr(1318));
     if (!achievementDraft.conditions.length) return alertDialog(_tr(1316),_tr(1319));
     if (achievementDraft.conditions.some(c => !achievementConditionValid(c, p))) return alertDialog(_tr(1316),_tr(1320));
+    if (achievementConditionsRepeat(achievementDraft.conditions, p)) {
+      return alertDialog(_tr(1316), uiText110('有重复的达成条件，请删除重复项后再保存。', 'Remove duplicate unlock conditions before saving.'));
+    }
     const clean = normalizeAchievements([{
       ...achievementDraft,
       name
@@ -35118,7 +35122,7 @@ localizeStaticShell();
     stateResponseEditingId = live?.id || '';
     stateResponseDraft = live ? JSON.parse(JSON.stringify(live)) : normalizeStateResponse({
       id: uid(),
-      name: _tr(474,[(p.stateResponses || []).length + 1]),
+      name: uniqueNumberedEditorName(_tr(474, ['']).trim(), p.stateResponses || []),
       conditionMode: 'all',
       conditions: [],
       effects: []
@@ -35232,11 +35236,10 @@ localizeStaticShell();
   }
   function newEntityActionDraft() {
     const p = currentProject(),
-      settings = normalizeStatusPanelSettings(p.statusPanelSettings),
-      n = (p.entityActions || []).length + 1;
+      settings = normalizeStatusPanelSettings(p.statusPanelSettings);
     return normalizeEntityActions([{
       id: uid(),
-      name: _tr(334,[n]),
+      name: uniqueNumberedEditorName(_tr(334, ['']).trim(), p.entityActions || []),
       displayName: '',
       categoryId: settings.categories[0]?.id || '',
       operations: []
@@ -35597,7 +35600,7 @@ localizeStaticShell();
     effectGroupEditingId = existing?.id || '';
     effectGroupDraft = existing ? JSON.parse(JSON.stringify(existing)) : normalizeEffectGroup({
       id: uid(),
-      name: _tr(472,[(p.effectGroups || []).length + 1]),
+      name: uniqueNumberedEditorName(_tr(472, ['']).trim(), p.effectGroups || []),
       conditions: [],
       effects: []
     }, (p.effectGroups || []).length);
@@ -35745,7 +35748,7 @@ localizeStaticShell();
     eventPoolEditingId = src?.id || '';
     eventPoolDraft = src ? JSON.parse(JSON.stringify(src)) : {
       id: uid(),
-      name: _tr(467,[(p.storyEventPools || []).length + 1]),
+      name: uniqueNumberedEditorName(_tr(467, ['']).trim(), p.storyEventPools || []),
       entries: [],
       createdAt: nowIso()
     };
@@ -37122,7 +37125,7 @@ localizeStaticShell();
     renderStorySystems();
   }
   function defaultVariableStateRoute() {
-    const v = (currentProject().variables || []).find(x => x.valueType === 'number');
+    const v = preferredStoryVariable((currentProject().variables || []).filter(v => v.valueType === 'number'));
     return normalizeStateRoute({
       type: 'variable',
       mode: 'all',
@@ -37181,6 +37184,7 @@ localizeStaticShell();
           const row = document.createElement('div');
           row.className = 'state-route-memory-row';
           row.innerHTML = _tr(1587,[memorySelectOptions(id) || _tr(1586)]);
+          preserveInvalidSelection($('[data-route-memory]', row), id);
           $('[data-route-memory]', row).onchange = e => rule.memoryIds[i] = e.target.value;
           $('[data-new-route-memory]', row).onclick = () => beginDependencyCreation('memory', ui110RouteEditor?.layer || $('#stateRouteLayer'), m => {
             rule.memoryIds[i] = m.id;
@@ -37206,17 +37210,18 @@ localizeStaticShell();
           const row = document.createElement('div');
           if (rule.type === 'entity') {
             let inf = entityTargetInfo(c.entityId);
-            if (!inf) {
+            if (!c.entityId) {
               const candidate = [...(currentProject().entities || []).map(e => e.id), ...plannedEntityReferences().map(x => x.targetId)].find(id => (entityTargetInfo(id)?.fields || []).some(f => variableById(f.variableId)?.valueType === 'number'));
               c.entityId = candidate || '';
               inf = entityTargetInfo(c.entityId);
             }
-            if (c.entityId && !entityTargetFieldDefinition(c.entityId, c.variableId)) {
+            if (inf && !c.variableId) {
               const f = (inf?.fields || []).find(f => variableById(f.variableId)?.valueType === 'number');
               c.variableId = f?.variableId || '';
             }
             row.className = 'state-route-entity-row';
             row.innerHTML = _tr(1592,[entityOptions(c.entityId) || _tr(1590),numericEntityFieldOptions(c.entityId, c.variableId) || _tr(1591),stateRouteOperatorOptions(c.operator),conditionCompareEditorHtml(c, 'number')]);
+            preserveInvalidSelection($('[data-route-entity]', row), c.entityId);
             $('[data-route-entity]', row).onchange = e => {
               c.entityId = e.target.value;
               const f = (entityTargetInfo(c.entityId)?.fields || []).find(f => variableById(f.variableId)?.valueType === 'number');
@@ -37230,10 +37235,12 @@ localizeStaticShell();
               if (!f) toast(_tr(1593));
               renderStateRouteManager();
             });
+            preserveInvalidSelection($('[data-route-entity-field]', row), c.variableId);
             $('[data-route-entity-field]', row).onchange = e => c.variableId = e.target.value;
           } else {
             row.className = 'state-route-variable-row';
             row.innerHTML = _tr(1595,[numericVariableOptions(c.variableId) || _tr(1594),stateRouteOperatorOptions(c.operator),conditionCompareEditorHtml(c, 'number')]);
+            preserveInvalidSelection($('[data-route-variable]', row), c.variableId);
             $('[data-route-variable]', row).onchange = e => c.variableId = e.target.value;
             $('[data-new-route-variable]', row).onclick = () => beginDependencyCreation('variable', ui110RouteEditor?.layer || $('#stateRouteLayer'), v => {
               if (v.valueType !== 'number') {
@@ -37269,7 +37276,7 @@ localizeStaticShell();
               compareValue: '0'
             });
           } else {
-            const v = (currentProject().variables || []).find(x => x.valueType === 'number');
+            const v = preferredStoryVariable((currentProject().variables || []).filter(v => v.valueType === 'number'));
             rule.conditions.push({
               entityId: '',
               variableId: v?.id || '',
@@ -38079,7 +38086,7 @@ localizeStaticShell();
       }],
       rangeMin: 0,
       rangeMax: 10,
-      mutable: false,
+      mutable: true,
       visible: false,
       changeNotice: normalizeSystemNotice(),
       note: '',
@@ -38096,7 +38103,6 @@ localizeStaticShell();
         variableDraft.valueType = 'number';
         variableDraft.initialValue = 0;
       }
-      if (preset.mutable === true) variableDraft.mutable = true;
       if (preset.visible === true) variableDraft.visible = true;
       if (preset.label) variableDraft.label = preset.label;
     }
@@ -38457,10 +38463,13 @@ localizeStaticShell();
       return `<option value="${escapeHtml(v)}" ${sel ? 'selected' : ''}>${escapeHtml(c.display)}</option>`;
     }).join('');
   }
+  function preferredStoryVariable(variables) {
+    return variables.find(v => !isTimerVariable(v)) || variables[0];
+  }
   function newCondition(type = 'memory') {
     const p = currentProject();
     if (type === 'variable') {
-      const v = timerVisibleVariables('',{nodeId:timerContextNodeId()})[0] || p.variables.find(v=>!isTimerVariable(v));
+      const v = preferredStoryVariable(timerVisibleVariables());
       return normalizeCondition({
         type: 'variable',
         state: 'on',
@@ -38560,7 +38569,7 @@ localizeStaticShell();
   }
   function variableOperatorOptions(c) {
     const v = timerEditableVariable(c.variableId),
-      numeric = v?.valueType === 'number',
+      numeric = !v || v.valueType === 'number',
       options = numeric ? [['eq', '='], ['neq', '≠'], ['gt', '>'], ['gte', '≥'], ['lt', '<'], ['lte', '≤']] : [['eq', '='], ['neq', '≠']];
     return options.map(([value, label]) => `<option value="${value}" ${c.operator === value ? 'selected' : ''}>${label}</option>`).join('');
   }
@@ -38708,7 +38717,7 @@ localizeStaticShell();
   }
   function entityOperatorOptions(c) {
     const v = entityFieldVariable(c.entityId, c.variableId),
-      numeric = v?.valueType === 'number',
+      numeric = !v || v.valueType === 'number',
       options = numeric ? [['eq', '='], ['neq', '≠'], ['gt', '>'], ['gte', '≥'], ['lt', '<'], ['lte', '≤']] : [['eq', '='], ['neq', '≠']];
     return options.map(([value, label]) => `<option value="${value}" ${c.operator === value ? 'selected' : ''}>${label}</option>`).join('');
   }
@@ -38720,13 +38729,13 @@ localizeStaticShell();
     }
   }
   function conditionCompareVariableOptions(selected = '', targetType = 'text') {
-    return timerMissingOption(selected)+timerVisibleVariables(selected).filter(v => (v.valueType === 'number' ? 'number' : 'text') === targetType).map(v => `<option value="${escapeHtml(v.id)}" ${v.id === selected ? 'selected' : ''}>${escapeHtml(timerOptionLabel(v))} · ${escapeHtml(v.name)}</option>`).join('');
+    return timerVisibleVariables(selected).filter(v => !targetType || v.valueType === targetType).map(v => `<option value="${escapeHtml(v.id)}" ${v.id === selected ? 'selected' : ''}>${escapeHtml(timerOptionLabel(v))} · ${escapeHtml(v.name)}</option>`).join('');
   }
   function conditionCompareFieldOptions(entityId, selected = '', targetType = 'text') {
     const info = entityTargetInfo(entityId, currentProject());
     return (info?.fields || []).map(f => {
       const v = variableById(f.variableId);
-      if (!v || (v.valueType === 'number' ? 'number' : 'text') !== targetType) return '';
+      if (!v || targetType && v.valueType !== targetType) return '';
       return `<option value="${escapeHtml(v.id)}" ${v.id === selected ? 'selected' : ''}>${escapeHtml(variableDisplayName(v))} · ${escapeHtml(v.name)}</option>`;
     }).join('');
   }
@@ -38735,16 +38744,16 @@ localizeStaticShell();
       sourceSelect = _tr(1720,[source === 'fixed' ? 'selected' : '',source === 'variable' ? 'selected' : '',source === 'entity' ? 'selected' : '']);
     let detail = '';
     if (source === 'variable') {
-      const eligible=timerVisibleVariables(c.compareVariableId).filter(v=>(v.valueType==='number'?'number':'text')===targetType);
-      if(!c.compareVariableId)c.compareVariableId=eligible[0]?.id||'';
+      const eligible=timerVisibleVariables(c.compareVariableId).filter(v=>!targetType||v.valueType===targetType);
+      if(!c.compareVariableId)c.compareVariableId=preferredStoryVariable(eligible)?.id||'';
       const missing=c.compareVariableId&&!eligible.some(v=>v.id===c.compareVariableId);
-      detail=`<div class="condition-source-detail"><select data-compare-variable>${missing?`<option value="${escapeHtml(c.compareVariableId)}" selected>${escapeHtml(_tr(3058))}</option>`:''}${conditionCompareVariableOptions(c.compareVariableId,targetType)||_tr(1721)}</select></div>`;
+      detail=`<div class="condition-source-detail"><select data-compare-variable>${missing?`<option value="${escapeHtml(c.compareVariableId)}" selected disabled>${escapeHtml(_tr(3058))}</option>`:''}${conditionCompareVariableOptions(c.compareVariableId,targetType)||_tr(1721)}</select></div>`;
     } else if (source === 'entity') {
       if(!c.compareEntityId)c.compareEntityId=[...(currentProject().entities||[]).map(e=>e.id),...plannedEntityReferences().map(x=>x.targetId)].find(id=>conditionCompareFieldOptions(id,'',targetType))||'';
-      const info=entityTargetInfo(c.compareEntityId),fields=(info?.fields||[]).filter(f=>(variableById(f.variableId)?.valueType==='number'?'number':'text')===targetType);
+      const info=entityTargetInfo(c.compareEntityId),fields=(info?.fields||[]).filter(f=>!targetType||variableById(f.variableId)?.valueType===targetType);
       if(!c.compareEntityVariableId)c.compareEntityVariableId=fields[0]?.variableId||'';
       const missingEntity=c.compareEntityId&&!info,missingField=c.compareEntityVariableId&&!fields.some(f=>f.variableId===c.compareEntityVariableId);
-      detail=`<div class="condition-source-detail entity"><select data-compare-entity>${missingEntity?`<option value="${escapeHtml(c.compareEntityId)}" selected>${escapeHtml(_tr(3058))}</option>`:''}${entityOptions(c.compareEntityId)||_tr(1590)}</select><select data-compare-entity-field>${missingField?`<option value="${escapeHtml(c.compareEntityVariableId)}" selected>${escapeHtml(_tr(3058))}</option>`:''}${conditionCompareFieldOptions(c.compareEntityId,c.compareEntityVariableId,targetType)||_tr(1722)}</select></div>`;
+      detail=`<div class="condition-source-detail entity"><select data-compare-entity>${missingEntity?`<option value="${escapeHtml(c.compareEntityId)}" selected disabled>${escapeHtml(_tr(3058))}</option>`:''}${entityOptions(c.compareEntityId)||_tr(1590)}</select><select data-compare-entity-field>${missingField?`<option value="${escapeHtml(c.compareEntityVariableId)}" selected disabled>${escapeHtml(_tr(3058))}</option>`:''}${conditionCompareFieldOptions(c.compareEntityId,c.compareEntityVariableId,targetType)||_tr(1722)}</select></div>`;
     } else detail = _tr(1723,[targetType === 'number' ? 'inputmode="decimal"' : '',escapeHtml(c.compareValue ?? '')]);
     return `<div class="condition-value-editor">${sourceSelect}${detail}</div>`;
   }
@@ -38789,7 +38798,7 @@ localizeStaticShell();
     if (ent) ent.onchange = e => {
       before();
       c.compareEntityId = e.target.value;
-      const f = (entityTargetInfo(c.compareEntityId)?.fields || []).find(f => (variableById(f.variableId)?.valueType === 'number' ? 'number' : 'text') === targetType);
+      const f = (entityTargetInfo(c.compareEntityId)?.fields || []).find(f => !targetType || variableById(f.variableId)?.valueType === targetType);
       c.compareEntityVariableId = f?.variableId || '';
       onChange();
     };
@@ -38799,6 +38808,24 @@ localizeStaticShell();
       c.compareEntityVariableId = e.target.value;
       if (onBeforeChange) onChange();
     };
+  }
+  function preserveInvalidSelection(select, value) {
+    if (!select || !value) return;
+    if (![...select.options].some(option => option.value === value)) {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = _tr(3058);
+      option.disabled = true;
+      select.prepend(option);
+    }
+    select.value = value;
+    if (select.selectedOptions[0]?.disabled) {
+      select.setAttribute('data-invalid-reference', '');
+      select.addEventListener('change', () => select.removeAttribute('data-invalid-reference'), {once: true});
+    }
+  }
+  function missingConditionType(variable, condition) {
+    return variable?.valueType || (['gt', 'gte', 'lt', 'lte'].includes(condition.operator) ? 'number' : null);
   }
   function renderConditionRows(container, list, onChange) {
     const previousTimerContext=timerPickerNodeId;timerPickerNodeId=timerNodeContext(container);timerCoverageCache?.delete(currentProject());
@@ -38811,7 +38838,7 @@ localizeStaticShell();
       const typeOptions = _tr(1725,[c.type === 'memory' ? 'selected' : '',c.type === 'variable' ? 'selected' : '',c.type === 'entity' ? 'selected' : '',c.type === 'binding' ? 'selected' : '',c.type === 'visited' ? 'selected' : '',c.type === 'choice' ? 'selected' : '']);
       if (c.type === 'variable') {
         row.className = 'condition-row variable-condition';
-        const targetType = timerEditableVariable(c.variableId)?.valueType === 'number' ? 'number' : 'text';
+        const targetType = missingConditionType(variableById(c.variableId), c);
         row.innerHTML = _tr(1727,[typeOptions,variableSelectOptions(c.variableId) || _tr(1726),variableOperatorOptions(c),conditionCompareEditorHtml(c, targetType)]);
         $('[data-type]', row).onchange = e => {
           list[i] = newCondition(e.target.value);
@@ -38833,17 +38860,17 @@ localizeStaticShell();
         bindConditionCompareEditor(row, c, targetType, onChange);
       } else if (c.type === 'entity') {
         let info = entityTargetInfo(c.entityId);
-        if (!info) {
+        if (!c.entityId) {
           const opts = [...(currentProject().entities || []).map(e => e.id), ...plannedEntityReferences().map(x => x.targetId)];
           c.entityId = opts[0] || '';
           info = entityTargetInfo(c.entityId);
         }
-        if (c.entityId && !entityTargetFieldDefinition(c.entityId, c.variableId)) {
+        if (info && !c.variableId) {
           const field = info?.fields?.[0];
           c.variableId = field?.variableId || '';
         }
         row.className = 'condition-row entity-condition';
-        const targetType = timerEditableVariable(c.variableId)?.valueType === 'number' ? 'number' : 'text';
+        const targetType = missingConditionType(entityFieldVariable(c.entityId, c.variableId), c);
         row.innerHTML = _tr(1729,[typeOptions,entityOptions(c.entityId) || _tr(1590),entityFieldOptions(c.entityId, c.variableId) || _tr(1728),entityOperatorOptions(c),conditionCompareEditorHtml(c, targetType)]);
         $('[data-type]', row).onchange = e => {
           list[i] = newCondition(e.target.value);
@@ -38904,6 +38931,16 @@ localizeStaticShell();
         };
         $('[data-state]', row).onchange = e => c.state = e.target.value;
         $('[data-ref]', row).onchange = e => applyConditionRef(c, e.target.value);
+      }
+      if (c.type === 'variable') preserveInvalidSelection($('[data-variable]', row), c.variableId);
+      if (c.type === 'entity') {
+        preserveInvalidSelection($('[data-entity]', row), c.entityId);
+        preserveInvalidSelection($('[data-entity-field]', row), c.variableId);
+      }
+      if (c.type === 'memory') preserveInvalidSelection($('[data-ref]', row), c.memoryId);
+      if (c.type === 'visited') preserveInvalidSelection($('[data-ref]', row), c.nodeId);
+      if (c.type === 'choice' && (c.nodeId || c.optionLabel)) {
+        preserveInvalidSelection($('[data-ref]', row), c.nodeId + '␟' + c.optionLabel);
       }
       $('.logic-remove', row).onclick = () => {
         list.splice(i, 1);
@@ -39335,7 +39372,8 @@ localizeStaticShell();
       action: 'remember'
     };
     if (kind === 'variable') {
-      const v = timerVisibleVariables().find(x => x.mutable) || timerVisibleVariables()[0];
+      const variables = timerVisibleVariables(),
+        v = variables.find(v => !isTimerVariable(v) && v.mutable) || preferredStoryVariable(variables);
       return {
         kind: 'variable',
         variableId: v?.id || '',
@@ -39419,8 +39457,8 @@ localizeStaticShell();
     }
   }
   function effectValueEditorHtml(e, targetType = 'text', disabled = false) {
+    if (disabled) return '';
     ensureEffectSourceDefaults(e, targetType);
-    if (disabled) return _tr(1791,[]);
     const sourceOptions = _tr(1793,[e.valueSource === 'fixed' ? 'selected' : '',e.valueSource === 'variable' ? 'selected' : '',e.valueSource === 'entity' ? 'selected' : '',targetType === 'number' ? _tr(1792,[e.valueSource === 'random_int' ? 'selected' : '']) : '']);
     let detail = '';
     if (e.valueSource === 'fixed') detail = _tr(1794,[targetType === 'number' ? 'inputmode="decimal"' : '',escapeHtml(e.value ?? '')]);else if (e.valueSource === 'variable') detail = `<div class="effect-source-detail"><select data-source-variable>${effectSourceVariableOptions(e.sourceVariableId, targetType) || _tr(1721)}</select></div>`;else if (e.valueSource === 'entity') detail = `<div class="effect-source-detail entity"><select data-source-entity>${entityOptions(e.sourceEntityId) || _tr(1590)}</select><select data-source-entity-field>${effectSourceEntityFieldOptions(e.sourceEntityId, e.sourceEntityVariableId, targetType) || _tr(1722)}</select></div>`;else detail = _tr(1795,[escapeHtml(String(e.randomMin ?? '')),escapeHtml(String(e.randomMax ?? ''))]);
@@ -39533,8 +39571,10 @@ localizeStaticShell();
         if (!entityAction && !displayAction && !visibilityAction && !canValue) e.action = 'show';
         if (!numeric && !displayAction && ['add', 'sub'].includes(e.action)) e.action = 'set';
         const nameSelected = e.variableId === '__displayName__' || displayAction;
+        const noValue = entityAction || e.action !== 'set_display_name' && (nameSelected || visibilityAction);
         row.className = 'logic-row effect entity-effect';
-        row.innerHTML = _tr(1812,[kindOptions,entityOptions(e.entityId) || _tr(1590),entityAction ? 'selected' : '',nameSelected ? 'selected' : '',entityFieldOptions(e.entityId, nameSelected ? '' : e.variableId),entityAction ? _tr(1807,[e.action === 'show_entity' ? 'selected' : '',e.action === 'hide_entity' ? 'selected' : '',e.action === 'remove' ? 'selected' : '']) : nameSelected ? _tr(1808,[e.action === 'set_display_name' ? 'selected' : '',e.action === 'show_display_name' ? 'selected' : '',e.action === 'hide_display_name' ? 'selected' : '']) : _tr(1811,[canValue ? _tr(1810,[e.action === 'set' ? 'selected' : '',numeric ? _tr(1809,[e.action === 'add' ? 'selected' : '',e.action === 'sub' ? 'selected' : '']) : '']) : '',e.action === 'show' ? 'selected' : '',e.action === 'hide' ? 'selected' : '']),effectValueEditorHtml(e, nameSelected ? 'text' : numeric ? 'number' : 'text', entityAction || nameSelected && e.action !== 'set_display_name' || !nameSelected && (e.action === 'show' || e.action === 'hide'))]);
+        row.classList.toggle('effect-without-value', noValue);
+        row.innerHTML = _tr(1812,[kindOptions,entityOptions(e.entityId) || _tr(1590),entityAction ? 'selected' : '',nameSelected ? 'selected' : '',entityFieldOptions(e.entityId, nameSelected ? '' : e.variableId),entityAction ? _tr(1807,[e.action === 'show_entity' ? 'selected' : '',e.action === 'hide_entity' ? 'selected' : '',e.action === 'remove' ? 'selected' : '']) : nameSelected ? _tr(1808,[e.action === 'set_display_name' ? 'selected' : '',e.action === 'show_display_name' ? 'selected' : '',e.action === 'hide_display_name' ? 'selected' : '']) : _tr(1811,[canValue ? _tr(1810,[e.action === 'set' ? 'selected' : '',numeric ? _tr(1809,[e.action === 'add' ? 'selected' : '',e.action === 'sub' ? 'selected' : '']) : '']) : '',e.action === 'show' ? 'selected' : '',e.action === 'hide' ? 'selected' : '']),effectValueEditorHtml(e, nameSelected ? 'text' : numeric ? 'number' : 'text', noValue)]);
         $('[data-entity]', row).onchange = ev => {
           e.entityId = ev.target.value;
           const inf = entityTargetInfo(e.entityId),
@@ -39582,6 +39622,7 @@ localizeStaticShell();
         if (!numeric && ['add', 'sub'].includes(e.action)) e.action = 'set';
         const canValue = Boolean(v?.mutable);
         row.className = 'logic-row effect variable-effect';
+        row.classList.toggle('effect-without-value', e.action === 'show' || e.action === 'hide');
         row.innerHTML = _tr(1813,[kindOptions,variableSelectOptions(e.variableId, false) || _tr(1726),canValue ? _tr(1810,[e.action === 'set' ? 'selected' : '',numeric ? _tr(1809,[e.action === 'add' ? 'selected' : '',e.action === 'sub' ? 'selected' : '']) : '']) : '',e.action === 'show' ? 'selected' : '',e.action === 'hide' ? 'selected' : '',effectValueEditorHtml(e, numeric ? 'number' : 'text', e.action === 'show' || e.action === 'hide')]);
         $('[data-variable]', row).onchange = ev => {
           e.variableId = ev.target.value;
@@ -45340,8 +45381,8 @@ localizeStaticShell();
   }
   const independentActionLabels = {
     memory:['故事记忆','Story flag'],variable:['故事变量','Story variable'],entity:['故事实体','Story entity'],template:['实体模板','Entity template'],
-    achievement:['成就','Achievement'],achievementCategory:['成就分类','Achievement category'],response:['状态响应','State response'],action:['实体操作','Entity action'],
-    effects:['变化组','Effect group'],events:['故事事件','Story events'],entityRules:['实体规则','Entity rules'],route:['状态跳转','State route'],panel:['故事面板','Story panel'],
+    achievement:['故事成就','Story achievement'],achievementCategory:['成就分类','Achievement category'],response:['状态响应','Reaction'],action:['实体操作','Entity action'],
+    effects:['状态变化组','Effect group'],events:['事件池','Event pool'],entityRules:['字段规则','Field rules'],route:['状态跳转','State route'],panel:['故事面板','Story panel'],
     chapter:['章节','Chapter'],chapterTimer:['章节倒计时','Chapter countdown'],theme:['主题','Theme'],material:['素材','Material'],set:['素材集合','Material set'],
     version:['本地保存','Local save'],record:['节点记录','Node record'],presentation:['故事表现设置','Story presentation'],dualTheme:['双主题设置','Dual theme settings'],
     group:['故事系统分组','Story system group'],panelEntry:['面板条目','Panel entry'],panelCategory:['面板分类','Panel category']
@@ -50788,7 +50829,7 @@ function compactPlayerCss(published=false){
   function timerDefaultLabel(v,p=currentProject()) {
     const source=timerSources(p).find(x=>x.id===v.id);
     if(!source||source.scope==='story')return _tr(438);
-    return source.timer.name||_tr(1178,[source.chapter.countdowns.indexOf(source.timer)+1]);
+    return chapterTimerNotes(source.chapter.countdowns)[source.chapter.countdowns.indexOf(source.timer)];
   }
   function migrateTimerReservedNames(p) {
     const used=new Set([...(p.variables||[]).map(v=>String(v.name).toLowerCase()),...(p.nodes||[]).flatMap(n=>(n.localVariables||[]).map(v=>String(v.name).toLowerCase()))]);
@@ -50869,8 +50910,17 @@ function compactPlayerCss(published=false){
     const summary=timerRemovalSummary(p,ids);return !summary||await confirmDialog(timerText('removeTitle'),summary,uiText('delete'),true);
   }
 
+  function chapterTimerNotes(timers) {
+    const used = timers.filter(timer => timer.name);
+    return timers.map((timer, index) => {
+      if (timer.name) return timer.name;
+      const name = nextChapterTimerNote(used, index + 1);
+      used.push({name});
+      return name;
+    });
+  }
   function nextChapterTimerNote(timers,start=1) {
-    const used=new Set((timers||[]).map(t=>String(t.name||'').trim().toLowerCase()));let n=start,name=_tr(1178,[n]);while(used.has(name.toLowerCase()))name=_tr(1178,[++n]);return name;
+    return uniqueNumberedEditorName(_tr(1178, ['']).trim(), timers || [], start);
   }
   function timerEditableVariable(id) {
     const v=variableById(id);if(v)return v;if(!String(id).startsWith('sys_timer_'))return null;
@@ -50919,7 +50969,7 @@ function compactPlayerCss(published=false){
     const sourceTitle=source?.scope==='chapter'?source.timer.name||timerDefaultLabel(v,p):memo||timerDefaultLabel(v,p);
     const summary=(source?.chapter?.name?source.chapter.name+' · ':'')+timerSourceSummary(v,p);
     const syntax=escapeHtml(timerText('nameHint',['${'+v.name+'}',defaultName])).replace(escapeHtml('${'+v.name+'}'),'<code class="timer-syntax">'+escapeHtml('${'+v.name+'}')+'</code>');
-    body.innerHTML='<div class="system-notice-summary timer-variable-source"><div><strong>'+escapeHtml(sourceTitle)+'</strong><small>'+escapeHtml(summary)+'</small></div><button class="chip-btn" id="timerVariableSourceBtn" type="button">'+escapeHtml(timerText('goSource'))+'</button></div><div class="field"><label for="timerVariableName">'+escapeHtml(uiText110('变量名','Variable name'))+'</label><input id="timerVariableName" maxlength="40" value="'+escapeHtml(v.name)+'"><p class="hint">'+syntax+'</p></div><div class="field"><label for="timerVariableLabel">'+escapeHtml(uiText110('备注名称','Reference name'))+'</label><input id="timerVariableLabel" maxlength="50" value="'+escapeHtml(memo)+'" placeholder="'+escapeHtml(source?.scope==='chapter'?_tr(1178,[source.chapter.countdowns.indexOf(source.timer)+1]):_tr(438))+'"><p class="hint">'+escapeHtml(uiText110('用于编辑器内识别；章节倒计时的备注名称与来源同步。','Used to identify this timer in the editor. Chapter timer names stay in sync with their source.'))+'</p></div><div class="field"><label>'+escapeHtml(uiText110('值类型','Value type'))+'</label><select disabled aria-label="'+escapeHtml(uiText110('值类型','Value type'))+'"><option>'+escapeHtml(uiText('number'))+'</option></select><p class="hint">'+escapeHtml(timerText('valueHint'))+'</p></div>';
+    body.innerHTML='<div class="system-notice-summary timer-variable-source"><div><strong>'+escapeHtml(sourceTitle)+'</strong><small>'+escapeHtml(summary)+'</small></div><button class="chip-btn" id="timerVariableSourceBtn" type="button">'+escapeHtml(timerText('goSource'))+'</button></div><div class="field"><label for="timerVariableName">'+escapeHtml(uiText110('变量名','Variable name'))+'</label><input id="timerVariableName" maxlength="40" value="'+escapeHtml(v.name)+'"><p class="hint">'+syntax+'</p></div><div class="field"><label for="timerVariableLabel">'+escapeHtml(uiText110('备注名称','Reference name'))+'</label><input id="timerVariableLabel" maxlength="50" value="'+escapeHtml(memo)+'" placeholder="'+escapeHtml(timerDefaultLabel(v,p))+'"><p class="hint">'+escapeHtml(uiText110('用于编辑器内识别；章节倒计时的备注名称与来源同步。','Used to identify this timer in the editor. Chapter timer names stay in sync with their source.'))+'</p></div><div class="field"><label>'+escapeHtml(uiText110('值类型','Value type'))+'</label><select disabled aria-label="'+escapeHtml(uiText110('值类型','Value type'))+'"><option>'+escapeHtml(uiText('number'))+'</option></select><p class="hint">'+escapeHtml(timerText('valueHint'))+'</p></div>';
     $('#timerVariableName').oninput=()=>timerVariableDraft.name=$('#timerVariableName').value;$('#timerVariableLabel').oninput=()=>timerVariableDraft.label=$('#timerVariableLabel').value;
     $('#timerVariableSourceBtn').onclick=goTimerVariableSource;
     layer.classList.remove('hidden');raiseEditorLayer(layer);
