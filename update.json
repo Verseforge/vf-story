@@ -1,8 +1,8 @@
 {
-  "versionCode": 15,
-  "versionName": "1.1.6",
+  "versionCode": 16,
+  "versionName": "1.1.7",
   "notes": {
-    "zh-CN": "修复新建实体的字段规则可能失效的问题。移动端的空状态文案弹窗改为靠上显示，关闭节点设置的子弹窗后会回到原来的编辑位置。",
-    "en": "Fixed an issue where field rules could stop working after a new entity was saved. On mobile, the empty-state message dialog now opens higher on the screen. Closing a dialog opened from the node editor now restores your scroll position."
+    "zh-CN": "优化了新建变量和规则的默认设置，让失效条件更容易辨认，防止重复添加成就条件，并统一了部分界面文案。",
+    "en": "Improved defaults for new variables and rules, made broken condition references easier to spot, prevented duplicate achievement conditions, and polished interface wording."
   }
 }
